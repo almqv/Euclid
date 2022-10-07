@@ -1,11 +1,17 @@
 cmake_minimum_required(VERSION 3.24.2)
 
 project(Hohmann VERSION 1.0)
-add_executable(Hohmann main.cpp)
+
+set(SOURCES src/main.cpp)
+add_executable(Hohmann ${SOURCES})
+
+set(INCLUDE_DIR include)
+target_include_directories(Hohmann PRIVATE ${INCLUDE_DIR})
+
+#set(INCLUDE_HEADER_FILES include/**/*.h include/**/*.hpp)
 
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
+find_package(glfw3 REQUIRED)
 
-include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+target_link_libraries( Hohmann OpenGL::GL glfw )
 
-target_link_libraries(Hohmann ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
