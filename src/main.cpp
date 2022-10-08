@@ -5,7 +5,7 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
-float verts[] = {
+static float verts[] = {
 	-0.5f, -0.5f, 0.0f,
 	 0.5f, -0.5f, 0.0f,
 	 0.0f,  0.5f, 0.0f
@@ -30,6 +30,8 @@ void renderCallback(GLFWwindow *win) {
 	glGenBuffers(1, &VBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_DYNAMIC_DRAW); // for moving stuff
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 }
 
 int main() {
@@ -40,7 +42,7 @@ int main() {
 
 	GLFWwindow* win = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hohmann", NULL, NULL);
 	if (win == NULL) {
-		printf("Failed to create a window.");
+		printf("Failed to create a window.\n");
 		glfwTerminate();
 		return 1;
 	}
@@ -48,7 +50,7 @@ int main() {
 	glfwMakeContextCurrent(win);
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
-		printf("Failed to init GLAD.");
+		printf("Failed to init GLAD.\n");
 		return 1;
 	}
 
@@ -60,6 +62,8 @@ int main() {
 		processInput(win);
 
 		// rendering
+		verts[1] += 0.0001f;
+		printf("f=%f\n", verts[1]);
 		renderCallback(win);
 
 		// glfw
