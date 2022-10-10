@@ -22,10 +22,15 @@ const char *fragShaderSource = "#version 330 core\n"
 	"	FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
 	"}\0";
 
-static float verts[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
+float verts[] = {
+	 0.5f,  0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f, 
+	-0.5f, -0.5f, 0.0f,  
+	-0.5f,  0.5f, 0.0f
+};
+unsigned int indices[] = {  
+	0, 1, 3, 
+	1, 2, 3	
 };  
 
 void framebuffer_size_callback(GLFWwindow* win, int w, int h) {
@@ -40,6 +45,7 @@ void processInput(GLFWwindow *win) {
 }
 
 struct RenderObj {
+	unsigned int EBO;
 	unsigned int VBO;
 	unsigned int VAO;
 	unsigned int shaderProg;
@@ -64,19 +70,22 @@ RenderObj preRenderCallback() {
 	glGenVertexArrays(1, &VAO); // gen the VAO
 	glBindVertexArray(VAO); // bind it
 
+	// Copy verts into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_DYNAMIC_DRAW); // for moving stuff
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-
-	// Copy verts into buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
 	// Set attrib pointers
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	return RenderObj {VBO, VAO, shaderProg};
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	return RenderObj {EBO, VBO, VAO, shaderProg};
 }
 
 void renderCallback(RenderObj ro) {
@@ -84,8 +93,8 @@ void renderCallback(RenderObj ro) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glUseProgram(ro.shaderProg);
-	glBindVertexArray(ro.VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ro.EBO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 int main() {
