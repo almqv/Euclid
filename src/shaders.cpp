@@ -1,8 +1,15 @@
 #include <fstream>
 #include <glad/glad.h>
 #include <vector>
+#include <filesystem>
 
 namespace Shader {
+	char* loadSourceFromFile(const char* file) {
+		char* src;	
+
+		return src;
+	}
+
 	unsigned int compile(GLenum shadertype, const char* shaderSource) {
 		unsigned int shader;
 		shader = glCreateShader(shadertype);
