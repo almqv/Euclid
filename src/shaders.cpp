@@ -15,8 +15,6 @@ namespace Shader {
 		if (!success) {
 			glGetShaderInfoLog(shader, 512, NULL, infolog);
 			printf("Shader Compilation Error:\n%s\n", infolog);
-		} else {
-			printf("Compiled shader %u!\n", shadertype);
 		}
 
 		return shader;
@@ -39,9 +37,11 @@ namespace Shader {
 		if (!success) {
 			glGetProgramInfoLog(shaderProg, 512, NULL, infolog);
 			printf("Shader Program Linking Error:\n%s\n", infolog);
-		} else {
-			printf("Linked shaders & created program: %u\n", shaderProg);
 		}
+
+		// Delete the shaders when we are done
+		for(unsigned int s : shaders)
+			glDeleteShader(s);
 
 		return shaderProg;
 	}

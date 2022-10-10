@@ -16,11 +16,11 @@ const char *vertexShaderSource = "#version 330 core\n"
 	"}\0";
 
 const char *fragShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\0";
+	"out vec4 FragColor;\n"
+	"void main()\n"
+	"{\n"
+	"	FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
+	"}\0";
 
 static float verts[] = {
 	-0.5f, -0.5f, 0.0f,
@@ -39,14 +39,13 @@ void processInput(GLFWwindow *win) {
 	}
 }
 
-void preRenderCallback(GLFWwindow *win) {
+struct RenderObj {
 	unsigned int VBO;
-	glGenBuffers(1, &VBO);
+	unsigned int VAO;
+	unsigned int shaderProg;
+};
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_DYNAMIC_DRAW); // for moving stuff
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-
+RenderObj preRenderCallback() {
 	// Compile a bunch of shaders etc
 	unsigned int vertShader = Shader::compile(GL_VERTEX_SHADER, vertexShaderSource);
 	unsigned int fragShader = Shader::compile(GL_FRAGMENT_SHADER, fragShaderSource);
@@ -56,6 +55,19 @@ void preRenderCallback(GLFWwindow *win) {
 	unsigned int shaderProg;
 	shaderProg = Shader::createProgram( std::vector<unsigned int> (std::begin(shaders), std::end(shaders)) );
 
+	// Vertex buffer object
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+
+	// Vertex Array Object
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO); // gen the VAO
+	glBindVertexArray(VAO); // bind it
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_DYNAMIC_DRAW); // for moving stuff
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
 	// Copy verts into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
@@ -64,16 +76,16 @@ void preRenderCallback(GLFWwindow *win) {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	// Use the shader program whenever we want to render
-	glUseProgram(shaderProg);
-	glDeleteShader(vertShader);
-	glDeleteShader(vertShader);  
-
+	return RenderObj {VBO, VAO, shaderProg};
 }
 
-void renderCallback(GLFWwindow *win) {
+void renderCallback(RenderObj ro) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	glUseProgram(ro.shaderProg);
+	glBindVertexArray(ro.VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 int main() {
@@ -99,16 +111,14 @@ int main() {
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
 
-	preRenderCallback(win);
+	RenderObj ro = preRenderCallback();
 
 	while (!glfwWindowShouldClose(win)) {
 		// Handle input
 		processInput(win);
 
 		// rendering
-		verts[1] += 0.0001f;
-		printf("f=%f\n", verts[1]);
-		renderCallback(win);
+		renderCallback(ro);
 
 		// glfw
 		glfwSwapBuffers(win);
