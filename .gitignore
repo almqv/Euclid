@@ -46,3 +46,6 @@ _deps
 
 # Dumb clang stuff
 .cache/
+
+# Build binary
+Hohmann
