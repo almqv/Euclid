@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <vector>
+#include <math.h>
 
 #include "shaders.cpp"
 
@@ -81,7 +82,13 @@ void renderCallback(RenderObj ro) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	float time = glfwGetTime();
+	float gVal = (sin(time) / 1.5f) + 0.5f;
+	int vertColLocation = glGetUniformLocation(ro.shaderProg, "inputColor");
+
 	glUseProgram(ro.shaderProg);
+	glUniform4f(vertColLocation, gVal, gVal, gVal, 1.0f);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ro.EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

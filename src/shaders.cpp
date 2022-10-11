@@ -25,8 +25,6 @@ namespace Shader {
 	}
 
 	unsigned int compile(GLenum shadertype, const char* shaderSource) {
-		printf("--------------SRC-PREVIEW--------------\n%s\n---------------------------------------\n", shaderSource);
-
 		unsigned int shader;
 		shader = glCreateShader(shadertype);
 		glShaderSource(shader, 1, &shaderSource, NULL);
