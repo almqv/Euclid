@@ -1,27 +1,30 @@
 #include <fstream>
 #include <glad/glad.h>
+#include <sstream>
 #include <vector>
 #include <string>
 #include <iostream>
 
-namespace Shader {
-	std::string loadSourceFromFile(const char* file) {
-		std::string content;
-		std::ifstream fh(file, std::ios::in);
+#include "../headers/shaders.hpp"
 
-		if(!fh.is_open()) {
-			printf("Unable to read file \"%s\"!", file);
-			return "";
+namespace Shaders {
+	std::string loadSourceFromFile(const char* fp) {
+		std::string src;
+		std::ifstream fh;
+
+		fh.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		try {
+			fh.open(fp);
+			std::stringstream sstr;
+			sstr << fh.rdbuf();
+			fh.close();
+
+			src = sstr.str();
+			return src;
+		} catch (std::ifstream::failure err) {
+			printf("[ERROR] Unable to read file \"%s\\n", fp);
+			exit(1);
 		}
-
-		std::string line = "";
-		while(!fh.eof()) {
-			std::getline(fh, line);
-			content.append(line + "\n");
-		}
-
-		fh.close();
-		return content.c_str();
 	}
 
 	unsigned int compile(GLenum shadertype, const char* shaderSource) {
@@ -71,5 +74,28 @@ namespace Shader {
 			glDeleteShader(s);
 
 		return shaderProg;
+	}
+
+	Shader::Shader(const char* vertPath, const char* fragPath) {
+		unsigned int vertShader = compileFromFile(GL_VERTEX_SHADER, vertPath);
+		unsigned int fragShader = compileFromFile(GL_FRAGMENT_SHADER, fragPath);
+		unsigned int shaders[2] = {vertShader, fragShader};
+
+		// Shader program ID
+		id = Shaders::createProgram( std::vector<unsigned int> (std::begin(shaders), std::end(shaders)) );
+	}
+
+	void Shader::use() { glUseProgram(id); }
+
+	void Shader::setInt(const std::string &name, int val) const {
+		glUniform1i(glGetUniformLocation(id, name.c_str()), val);
+	}
+
+	void Shader::setFloat(const std::string &name, float val) const {
+		glUniform1f(glGetUniformLocation(id, name.c_str()), val);
+	}
+
+	void Shader::setBool(const std::string &name, bool val) const {
+		glUniform1i(glGetUniformLocation(id, name.c_str()), (int)val)	;
 	}
 }

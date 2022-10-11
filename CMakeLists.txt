@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24.2)
 
 project(Hohmann VERSION 1.0)
 
-set(SOURCES src/main.cpp)
+file(GLOB SOURCES src/*.cpp headers/*.hpp)
 add_executable(Hohmann ${SOURCES})
 
 # GLFW submodule

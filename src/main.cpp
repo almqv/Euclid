@@ -4,7 +4,7 @@
 #include <vector>
 #include <math.h>
 
-#include "shaders.cpp"
+#include "../headers/shaders.hpp"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
@@ -13,10 +13,10 @@
 #define FRAG_SHADER_SRC_FILE "shaders/fragment.glsl"
 
 float verts[] = {
-	 0.5f,  0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f, 
-	-0.5f, -0.5f, 0.0f,  
-	-0.5f,  0.5f, 0.0f
+	 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f,
+	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+	-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f,
+	-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 };
 unsigned int indices[] = {  
 	0, 1, 3, 
@@ -36,20 +36,11 @@ void processInput(GLFWwindow *win) {
 
 struct RenderObj {
 	unsigned int EBO;
-	unsigned int VBO;
-	unsigned int VAO;
-	unsigned int shaderProg;
+	Shaders::Shader shader;
 };
 
 RenderObj preRenderCallback() {
-	// Compile a bunch of shaders etc
-	unsigned int vertShader = Shader::compileFromFile(GL_VERTEX_SHADER, VERT_SHADER_SRC_FILE);
-	unsigned int fragShader = Shader::compileFromFile(GL_FRAGMENT_SHADER, FRAG_SHADER_SRC_FILE);
-	unsigned int shaders[2] = {vertShader, fragShader};
-
-	// Create a shader program & link the shaders etc
-	unsigned int shaderProg;
-	shaderProg = Shader::createProgram( std::vector<unsigned int> (std::begin(shaders), std::end(shaders)) );
+	Shaders::Shader shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE);
 
 	// Vertex buffer object
 	unsigned int VBO;
@@ -66,8 +57,13 @@ RenderObj preRenderCallback() {
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
 	// Set attrib pointers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// Pos
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	// Color
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	unsigned int EBO;
 	glGenBuffers(1, &EBO);
@@ -75,7 +71,7 @@ RenderObj preRenderCallback() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	return RenderObj {EBO, VBO, VAO, shaderProg};
+	return RenderObj {EBO, shader};
 }
 
 void renderCallback(RenderObj ro) {
@@ -84,9 +80,9 @@ void renderCallback(RenderObj ro) {
 
 	float time = glfwGetTime();
 	float gVal = (sin(time) / 1.5f) + 0.5f;
-	int vertColLocation = glGetUniformLocation(ro.shaderProg, "inputColor");
+	int vertColLocation = glGetUniformLocation(ro.shader.id, "inputColor");
 
-	glUseProgram(ro.shaderProg);
+	ro.shader.use();
 	glUniform4f(vertColLocation, gVal, gVal, gVal, 1.0f);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ro.EBO);
