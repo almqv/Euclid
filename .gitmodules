@@ -4,3 +4,6 @@
 [submodule "lib/glad"]
 	path = lib/glad
 	url = https://github.com/Dav1dde/glad.git
+[submodule "extern/stb"]
+	path = extern/stb
+	url = https://github.com/nothings/stb.git

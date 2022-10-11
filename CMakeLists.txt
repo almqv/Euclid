@@ -14,5 +14,10 @@ add_subdirectory(lib/glfw)
 # GLAD
 add_subdirectory(lib/glad)
 
+# External headers & sources
+file(GLOB EXTERN_SOURCES extern/*)
+include_directories(${EXTERN_SOURCES})
+link_directories(${EXTERN_SOURCES})
+
 # Linking
 target_link_libraries(Hohmann PRIVATE glfw glad)

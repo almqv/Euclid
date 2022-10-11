@@ -12,6 +12,7 @@
 #define VERT_SHADER_SRC_FILE "shaders/vertex.glsl"
 #define FRAG_SHADER_SRC_FILE "shaders/fragment.glsl"
 
+#define RUSTY_METAL_TEXTURE "assets/textures/rusty_metal.jpg"
 
 void framebuffer_size_callback(GLFWwindow* win, int w, int h) {
 	glViewport(0, 0, w, h);
@@ -125,6 +126,10 @@ int main() {
 	// Textures
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	// "blending"
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
