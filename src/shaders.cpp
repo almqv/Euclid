@@ -1,16 +1,32 @@
 #include <fstream>
 #include <glad/glad.h>
 #include <vector>
-#include <filesystem>
+#include <string>
+#include <iostream>
 
 namespace Shader {
-	char* loadSourceFromFile(const char* file) {
-		char* src;	
+	std::string loadSourceFromFile(const char* file) {
+		std::string content;
+		std::ifstream fh(file, std::ios::in);
 
-		return src;
+		if(!fh.is_open()) {
+			printf("Unable to read file \"%s\"!", file);
+			return "";
+		}
+
+		std::string line = "";
+		while(!fh.eof()) {
+			std::getline(fh, line);
+			content.append(line + "\n");
+		}
+
+		fh.close();
+		return content.c_str();
 	}
 
 	unsigned int compile(GLenum shadertype, const char* shaderSource) {
+		printf("--------------SRC-PREVIEW--------------\n%s\n---------------------------------------\n", shaderSource);
+
 		unsigned int shader;
 		shader = glCreateShader(shadertype);
 		glShaderSource(shader, 1, &shaderSource, NULL);
@@ -24,6 +40,12 @@ namespace Shader {
 			printf("Shader Compilation Error:\n%s\n", infolog);
 		}
 
+		return shader;
+	}
+
+	unsigned int compileFromFile(GLenum shadertype, const char* file) {
+		std::string src = loadSourceFromFile(file);
+		unsigned int shader = compile(shadertype, src.c_str());
 		return shader;
 	}
 
