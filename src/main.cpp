@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "../headers/shaders.hpp"
+#include "../headers/textures.hpp"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
@@ -28,11 +29,10 @@ void processInput(GLFWwindow *win) {
 struct RenderObj {
 	unsigned int EBO;
 	Shaders::Shader shader;
+	Textures::Texture2D texture;
 };
 
 RenderObj preRenderCallback(unsigned int indices[], unsigned int indices_count, float verts[], unsigned int verts_count) {
-	Shaders::Shader shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE);
-
 	// Vertex buffer object
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
@@ -47,35 +47,48 @@ RenderObj preRenderCallback(unsigned int indices[], unsigned int indices_count, 
 	glBufferData(GL_ARRAY_BUFFER, verts_count, verts, GL_DYNAMIC_DRAW); // for moving stuff
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
-	// Set attrib pointers
-	// Pos
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// Color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
-	glEnableVertexAttribArray(1);
-
 	unsigned int EBO;
 	glGenBuffers(1, &EBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_count, indices, GL_STATIC_DRAW);
 
-	return RenderObj {EBO, shader};
+	// Set attrib pointers
+	#define VERTEX_ATTRIB_PTR_SIZE 8 * sizeof(float)
+
+	// Pos
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Color
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	// Texture
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)(6*sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+
+	Shaders::Shader shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE);
+	Textures::Texture2D texture(RUSTY_METAL_TEXTURE);
+
+	return RenderObj {EBO, shader, texture};
 }
 
 void renderCallback(RenderObj ro) {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	float time = glfwGetTime();
 	float gVal = (sin(time) / 1.5f) + 0.5f;
 
+
 	ro.shader.use();
 	ro.shader.setFloat("r", gVal);
 	ro.shader.setFloat("g", gVal);
 	ro.shader.setFloat("b", gVal);
+
+	ro.texture.use();
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ro.EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -102,7 +115,7 @@ int main() {
 	}
 
 	float verts[] = {
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 
 		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
 		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f,
 		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
@@ -122,14 +135,6 @@ int main() {
 
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
-
-	// Textures
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-
-	// "blending"
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);

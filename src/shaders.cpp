@@ -38,7 +38,7 @@ namespace Shaders {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if (!success) {
 			glGetShaderInfoLog(shader, 512, NULL, infolog);
-			printf("Shader Compilation Error:\n%s\n", infolog);
+			printf("[%s] Shader Compilation Error:\n%s\n", shaderSource, infolog);
 		}
 
 		return shader;
