@@ -12,16 +12,6 @@
 #define VERT_SHADER_SRC_FILE "shaders/vertex.glsl"
 #define FRAG_SHADER_SRC_FILE "shaders/fragment.glsl"
 
-float verts[] = {
-	 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
-};
-unsigned int indices[] = {  
-	0, 1, 3, 
-	1, 2, 3	
-};  
 
 void framebuffer_size_callback(GLFWwindow* win, int w, int h) {
 	glViewport(0, 0, w, h);
@@ -39,7 +29,7 @@ struct RenderObj {
 	Shaders::Shader shader;
 };
 
-RenderObj preRenderCallback() {
+RenderObj preRenderCallback(unsigned int indices[], unsigned int indices_count, float verts[], unsigned int verts_count) {
 	Shaders::Shader shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE);
 
 	// Vertex buffer object
@@ -53,7 +43,7 @@ RenderObj preRenderCallback() {
 
 	// Copy verts into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_DYNAMIC_DRAW); // for moving stuff
+	glBufferData(GL_ARRAY_BUFFER, verts_count, verts, GL_DYNAMIC_DRAW); // for moving stuff
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
 	// Set attrib pointers
@@ -69,7 +59,7 @@ RenderObj preRenderCallback() {
 	glGenBuffers(1, &EBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_count, indices, GL_STATIC_DRAW);
 
 	return RenderObj {EBO, shader};
 }
@@ -80,10 +70,11 @@ void renderCallback(RenderObj ro) {
 
 	float time = glfwGetTime();
 	float gVal = (sin(time) / 1.5f) + 0.5f;
-	int vertColLocation = glGetUniformLocation(ro.shader.id, "inputColor");
 
 	ro.shader.use();
-	glUniform4f(vertColLocation, gVal, gVal, gVal, 1.0f);
+	ro.shader.setFloat("r", gVal);
+	ro.shader.setFloat("g", gVal);
+	ro.shader.setFloat("b", gVal);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ro.EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -109,10 +100,36 @@ int main() {
 		return 1;
 	}
 
+	float verts[] = {
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	float texCoords[] = {
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f
+	};
+
+	unsigned int indices[] = {  
+		0, 1, 3, 
+		1, 2, 3	
+	};  
+
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
 
-	RenderObj ro = preRenderCallback();
+	// Textures
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+	RenderObj ro = preRenderCallback(indices, sizeof(indices), verts, sizeof(verts));
 
 	while (!glfwWindowShouldClose(win)) {
 		// Handle input
