@@ -76,7 +76,7 @@ RenderObj preRenderCallback(unsigned int indices[], unsigned int indices_count, 
 }
 
 void renderCallback(RenderObj ro) {
-	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	float time = glfwGetTime();
@@ -115,18 +115,12 @@ int main() {
 	}
 
 	float verts[] = {
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, -1.0f
 	};
-
-	float texCoords[] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f
-	};
+	// Vert struc: x y z  r g b  tx ty
 
 	unsigned int indices[] = {  
 		0, 1, 3, 
