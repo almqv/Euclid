@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
 #include <vector>
 #include <math.h>
@@ -68,35 +71,30 @@ RenderObj preRenderCallback(unsigned int indices[], unsigned int indices_count, 
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)(6*sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-
 	Shaders::Shader shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE);
 	Textures::Texture2D texture(RUSTY_METAL_TEXTURE);
 
 	return RenderObj {EBO, shader, texture};
 }
 
-void renderCallback(RenderObj ro) {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+void renderCallback() {
+	// Make background
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+}
 
-	float time = glfwGetTime();
-	float gVal = (sin(time) / 1.5f) + 0.5f;
+void renderObject(RenderObj ro, glm::mat4 T) {
+	// Bind the texture
+	ro.texture.bind();
 
-
-	ro.shader.use();
-	ro.shader.setFloat("r", gVal);
-	ro.shader.setFloat("g", gVal);
-	ro.shader.setFloat("b", gVal);
-
-	ro.texture.use();
+	ro.shader.setMat4("transform", T);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ro.EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 int main() {
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwInit(); glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -116,9 +114,9 @@ int main() {
 
 	float verts[] = {
 		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, -1.0f,
-		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, -1.0f
+		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f
 	};
 	// Vert struc: x y z  r g b  tx ty
 
@@ -140,7 +138,31 @@ int main() {
 		processInput(win);
 
 		// rendering
-		renderCallback(ro);
+		renderCallback();
+
+		/* OBJECT RENDERING */
+		float time = glfwGetTime();
+		float gVal = (sin(time) / 1.5f) + 0.5f;
+
+		// Coloring uniform
+		ro.shader.use();
+		// ro.shader.setFloat("r", gVal);
+		// ro.shader.setFloat("g", gVal);
+		// ro.shader.setFloat("b", gVal);
+
+		// Transformation
+		float rotang = time;
+
+		glm::mat4 T = glm::mat4(1.0f);
+		T = glm::rotate(T, rotang, glm::vec3(0.0, 0.707, 0.707));
+		T = glm::scale(T, glm::vec3(0.5, 0.5, 0.5));
+		renderObject(ro, T);
+
+		glm::mat4 T2 = glm::mat4(1.0f);
+		T2 = glm::translate(T2, glm::vec3(-0.5, 0.4, 0.0));
+		T2 = glm::rotate(T2, rotang, glm::vec3(0.707, 0.707, 0.0));
+		T2 = glm::scale(T2, glm::vec3(0.5, 0.5, 0.2));
+		renderObject(ro, T2);
 
 		// glfw
 		glfwSwapBuffers(win);

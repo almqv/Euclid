@@ -7,6 +7,8 @@
 
 #include "../headers/shaders.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Shaders {
 	std::string loadSourceFromFile(const char* fp) {
 		std::string src;
@@ -88,14 +90,23 @@ namespace Shaders {
 	void Shader::use() { glUseProgram(id); }
 
 	void Shader::setInt(const std::string &name, int val) const {
-		glUniform1i(glGetUniformLocation(id, name.c_str()), val);
+		glUniform1i(uniLocation(name), val);
 	}
 
 	void Shader::setFloat(const std::string &name, float val) const {
-		glUniform1f(glGetUniformLocation(id, name.c_str()), val);
+		glUniform1f(uniLocation(name), val);
 	}
 
 	void Shader::setBool(const std::string &name, bool val) const {
-		glUniform1i(glGetUniformLocation(id, name.c_str()), (int)val)	;
+		glUniform1i(uniLocation(name), (int)val);
+	}
+
+	void Shader::setMat4(const std::string &name, glm::mat4 val) const {
+		glUniformMatrix4fv(uniLocation(name), 1, GL_FALSE, glm::value_ptr(val));
+	};
+
+	// Private stuff
+	unsigned int Shader::uniLocation(const std::string &name) const {
+		return glGetUniformLocation(id, name.c_str());
 	}
 }

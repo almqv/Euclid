@@ -7,7 +7,7 @@ namespace Textures {
 			unsigned int id;
 			Texture2D(const char* t_src);
 			void load();
-			void use();
+			void bind();
 		private:
 			const char* texture_src;
 			int width, height, nrChannels;

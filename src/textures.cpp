@@ -40,7 +40,7 @@ namespace Textures {
 		stbi_image_free(data);
 	}
 
-	void Texture2D::use() {
+	void Texture2D::bind() {
 		glBindTexture(GL_TEXTURE_2D, id);
 	}
 }
