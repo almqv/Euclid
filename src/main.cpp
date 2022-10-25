@@ -8,6 +8,7 @@
 #include <math.h>
 
 #include "../headers/renderer.hpp"
+#include "glm/trigonometric.hpp"
 // #include "../headers/shaders.hpp"
 // #include "../headers/textures.hpp"
 
@@ -56,10 +57,10 @@ int main() {
 	}
 
 	float verts[] = {
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 
-		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 
+		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f
 	};
 	// Vert struc: x y z  r g b  tx ty
 
@@ -75,7 +76,9 @@ int main() {
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	Renderer::Obj2D ro(indices, sizeof(indices), verts, sizeof(verts));
+	ro.setTexture(RUSTY_METAL_TEXTURE);
 
+	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
 		// Handle input
 		processInput(win);
@@ -91,17 +94,10 @@ int main() {
 		float rotang = time;
 
 		glm::mat4 T = glm::mat4(1.0f);
-		T = glm::rotate(T, rotang, glm::vec3(0.0, 0.707, 0.707));
+		T = glm::rotate(T, rotang, glm::vec3(1.0, 0.0, 1.0));
 		T = glm::scale(T, glm::vec3(0.5, 0.5, 0.5));
 		ro.transform(T);
-		ro.render();
-
-		glm::mat4 T2 = glm::mat4(1.0f);
-		T2 = glm::rotate(T2, rotang, glm::vec3(0.707, 0.707, 0.0));
-		T2 = glm::translate(T2, glm::vec3(-0.5, 0.4, 0.0));
-		T2 = glm::scale(T2, glm::vec3(0.5, 0.5, 0.2));
-		ro.transform(T2);
-		ro.render();
+		ro.render(win);
 
 		// glfw
 		glfwSwapBuffers(win);
