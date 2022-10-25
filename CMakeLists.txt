@@ -3,9 +3,13 @@ cmake_minimum_required(VERSION 3.24.2)
 project(Hohmann VERSION 1.0)
 
 #### Sources
-file(GLOB SOURCES src/*.cpp headers/*.hpp)
-add_executable(Hohmann ${SOURCES})
+file(GLOB HEADERS headers/*.hpp headers/*.h)
+file(GLOB SOURCES src/*.cpp src/*.c)
 
+add_executable(Hohmann src/main.cpp)
+
+include_directories(headers)
+target_sources(Hohmann PRIVATE ${SOURCES})
 
 #### Libs
 # GLFW 

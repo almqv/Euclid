@@ -1,5 +1,4 @@
-#ifndef TEXTURES_HPP
-#define TEXTURES_HPP
+#pragma once
 
 namespace Textures {
 	class Texture2D {
@@ -14,4 +13,3 @@ namespace Textures {
 	};
 }
 
-#endif
