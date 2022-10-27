@@ -2,18 +2,44 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "GLFW/glfw3.h"
 #include "renderer.hpp"
 #include "shaders.hpp"
 
 namespace Renderer {
 
-	Renderer3D::Renderer3D() {
-		// TODO: Make more OOP
+	// Renderer3D
+	Renderer3D::Renderer3D(GLFWwindow* win) {
+		window = win;	
+
+		setFOV(DEFAULT_FOV);
 	}
 
-	Renderer3D::Renderer3D(std::vector<RenderObject> ROs) : Renderer3D() {
-		RenderObjects = ROs;
+	Renderer3D::Renderer3D(GLFWwindow* win, std::vector<RenderObject> ROs) : Renderer3D(win) {
+		renderObjects = ROs;
 	}
+
+	void Renderer3D::setFOV(float fov) {
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		projectionTransform = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
+	}
+
+	void Renderer3D::setCamera(glm::vec3 pos) {
+		cameraTransform = glm::translate(cameraTransform, pos); 
+	}
+
+	void Renderer3D::render() {
+		for ( RenderObject ro: renderObjects ) 
+			ro.render(window, cameraTransform, projectionTransform);
+	}
+
+	// RenderObject
+	RenderObject::RenderObject() {
+
+	}
+
+	void RenderObject::render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform) {}
 
 	void Obj2D::transform(glm::mat4 T) {
 		shader.setMat4("model", T);
@@ -49,20 +75,17 @@ namespace Renderer {
 	Obj2D::Obj2D(unsigned int indices[], unsigned int icount, float verts[], unsigned int vcount) 
 		: shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE) {
 
-		// Vertex buffer object
-		glGenBuffers(1, &VBO);
-
 		// Vertex Array Object
 		glGenVertexArrays(1, &VAO); // gen the VAO
 		glBindVertexArray(VAO); // bind it
 
-		// Copy verts into buffer
+		// Copy the verts into the buffer
+		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, vcount, verts, GL_DYNAMIC_DRAW); // for moving stuff
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
+		// Copy the indices for the verts into another buffer
 		glGenBuffers(1, &EBO);
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount, indices, GL_STATIC_DRAW);
 
