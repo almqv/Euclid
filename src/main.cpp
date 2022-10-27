@@ -49,8 +49,6 @@ int main() {
 		return 1;
 	}
 
-	Renderer::Renderer3D renderer(win);
-
 	glfwMakeContextCurrent(win);
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
@@ -58,18 +56,18 @@ int main() {
 		return 1;
 	}
 
-	std::vector<float> verts({
+	float verts[] = {
 		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 
 		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f
-	});
+	};
 	// Vert struc: x y z  r g b  tx ty
 
-	std::vector<unsigned int> indices({  
+	unsigned int indices[] = {  
 		0, 1, 3, 
 		1, 2, 3	
-	});  
+	};  
 
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
@@ -77,10 +75,15 @@ int main() {
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	Renderer::RenderObject ro(verts, indices);
-	renderer.spawnObject(ro);
-	// ro.setTexture(RUSTY_METAL_TEXTURE);
+	printf("%u %u\n", sizeof(indices), sizeof(verts));
+	Renderer::Obj2D ro2(indices, sizeof(indices), verts, sizeof(verts));
+	ro2.setTexture(RUSTY_METAL_TEXTURE);
 
+	// Renderer::RenderObject ro(verts, indices);
+	// Renderer::Renderer3D renderer(win);
+	// renderer.spawnObject(ro);
+	// ro.setTexture(RUSTY_METAL_TEXTURE);
+	
 	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
 		// Handle input
@@ -99,9 +102,10 @@ int main() {
 		glm::mat4 T = glm::mat4(1.0f);
 		T = glm::rotate(T, rotang, glm::vec3(1.0, 0.0, 1.0));
 		T = glm::scale(T, glm::vec3(0.5, 0.5, 0.5));
-		ro.transform(T);
+		ro2.transform(T);
+		ro2.render(win);
 
-		renderer.render();
+		//renderer.render();
 
 		// glfw
 		glfwSwapBuffers(win);
