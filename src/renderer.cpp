@@ -19,6 +19,10 @@ namespace Renderer {
 		renderObjects = ROs;
 	}
 
+	void Renderer3D::spawnObject(RenderObject ro) {
+		renderObjects.push_back(ro);
+	}
+
 	void Renderer3D::setFOV(float fov) {
 		int width, height;
 		glfwGetWindowSize(window, &width, &height);
@@ -35,11 +39,55 @@ namespace Renderer {
 	}
 
 	// RenderObject
-	RenderObject::RenderObject() {
+	RenderObject::RenderObject(std::vector<float> verts, std::vector<unsigned int> indices) 
+		: shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE) {
+		vertsVec = verts;
+		indicesVec = indices;
 
+		float* vertsArray = &vertsVec[0];
+		unsigned int* indicesArray = &indicesVec[0];
+
+		// Vertex Array Object
+		glGenVertexArrays(1, &VAO); // gen the VAO
+		glBindVertexArray(VAO); // bind it
+
+		// Copy the verts into the buffer
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, vertsVec.size(), vertsArray, GL_DYNAMIC_DRAW); // for moving stuff
+
+		// Copy the indices for the verts into another buffer
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesVec.size(), indicesArray, GL_STATIC_DRAW);
+
+		// Shader stuff
+		// Pos
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)0);
+		glEnableVertexAttribArray(0);
+
+		// Color
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)(3*sizeof(float)));
+		glEnableVertexAttribArray(1);
+
+		// Texture
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)(6*sizeof(float)));
+		glEnableVertexAttribArray(2);
 	}
 
-	void RenderObject::render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform) {}
+	void RenderObject::render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform) {
+		shader.setMat4("view", cameraTransform);
+		shader.setMat4("projection", projectionTransform);
+
+		shader.use();
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glDrawElements(GL_TRIANGLES, indicesVec.size(), GL_UNSIGNED_INT, 0);
+	}
+
+	void RenderObject::transform(glm::mat4 T) {
+		shader.setMat4("model", T);
+	}
 
 	void Obj2D::transform(glm::mat4 T) {
 		shader.setMat4("model", T);

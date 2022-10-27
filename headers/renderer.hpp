@@ -21,11 +21,16 @@
 namespace Renderer {
 	class RenderObject {
 		public:
-			RenderObject();
+			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
 			void render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform);
+			void transform(glm::mat4 T);
 		private:
-			std::vector<float> verts;
-			std::vector<unsigned int> indices;
+			Shaders::Shader shader;
+			unsigned int EBO;
+			unsigned int VBO;
+			unsigned int VAO;
+			std::vector<float> vertsVec;
+			std::vector<unsigned int> indicesVec;
 	};
 
 	class Renderer3D {
@@ -35,6 +40,7 @@ namespace Renderer {
 
 			void setCamera(glm::vec3 pos);
 			void setFOV(float deg);
+			void spawnObject(RenderObject ro);
 			void render();
 		private:
 			std::vector<RenderObject> renderObjects = std::vector<RenderObject>();
