@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -40,26 +39,27 @@ namespace Renderer {
 	}
 
 	// RenderObject
-	RenderObject::RenderObject(float verts[], unsigned int indices[]) 
+	RenderObject::RenderObject(std::vector<float> verts, std::vector<unsigned int> indices) 
 		: shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE) {
+		vertsVec = verts;
+		indicesVec = indices;
+
+		float* vertsArray = &vertsVec[0];
+		unsigned int* indicesArray = &indicesVec[0];
 
 		// Vertex Array Object
 		glGenVertexArrays(1, &VAO); // gen the VAO
 		glBindVertexArray(VAO); // bind it
 
 		// Copy the verts into the buffer
-		// unsigned int vertsSize = sizeof(verts);
-		unsigned int vertsSize = 4;
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertsSize, verts, GL_DYNAMIC_DRAW); // for moving stuff
+		glBufferData(GL_ARRAY_BUFFER, vertsVec.size(), vertsArray, GL_DYNAMIC_DRAW); // for moving stuff
 
 		// Copy the indices for the verts into another buffer
-		// vertCount = sizeof(indices);
-		vertCount = 6;
 		glGenBuffers(1, &EBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertCount, indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesVec.size(), indicesArray, GL_STATIC_DRAW);
 
 		// Shader stuff
 		// Pos
@@ -82,7 +82,7 @@ namespace Renderer {
 		shader.use();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glDrawElements(GL_TRIANGLES, vertCount, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, indicesVec.size(), GL_UNSIGNED_INT, 0);
 	}
 
 	void RenderObject::transform(glm::mat4 T) {

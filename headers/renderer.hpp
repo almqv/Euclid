@@ -21,15 +21,16 @@
 namespace Renderer {
 	class RenderObject {
 		public:
-			RenderObject(float verts[], unsigned int indices[]);
+			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
 			void render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform);
 			void transform(glm::mat4 T);
 		private:
 			Shaders::Shader shader;
-			unsigned int vertCount;
 			unsigned int EBO;
 			unsigned int VBO;
 			unsigned int VAO;
+			std::vector<float> vertsVec;
+			std::vector<unsigned int> indicesVec;
 	};
 
 	class Renderer3D {
