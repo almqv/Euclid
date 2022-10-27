@@ -44,8 +44,11 @@ namespace Renderer {
 		vertsVec = verts;
 		indicesVec = indices;
 
-		float* vertsArray = &vertsVec[0];
-		unsigned int* indicesArray = &indicesVec[0];
+		float vertsArray[vertsVec.size()];
+		std::copy(vertsVec.begin(), vertsVec.end(), vertsArray);
+
+		unsigned int indicesArray[indicesVec.size()];
+		std::copy(indicesVec.begin(), indicesVec.end(), indicesArray);
 
 		// Vertex Array Object
 		glGenVertexArrays(1, &VAO); // gen the VAO
@@ -54,12 +57,14 @@ namespace Renderer {
 		// Copy the verts into the buffer
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertsVec.size(), vertsArray, GL_DYNAMIC_DRAW); // for moving stuff
+		glBufferData(GL_ARRAY_BUFFER, vertsVec.size() * sizeof(vertsVec[0]), vertsArray, GL_DYNAMIC_DRAW); // for moving stuff
+		// printf("%u\n", sizeof(vertsVec[0]) * vertsVec.size());
 
 		// Copy the indices for the verts into another buffer
 		glGenBuffers(1, &EBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesVec.size(), indicesArray, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesVec.size() * sizeof(indicesVec[0]), indicesArray, GL_STATIC_DRAW);
+		// printf("%u\n",indicesVec.size() * sizeof(indicesVec[0]));
 
 		// Shader stuff
 		// Pos
