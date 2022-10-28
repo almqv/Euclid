@@ -9,12 +9,69 @@
 #include "shaders.hpp"
 
 namespace Renderer {
+	// Object
+	Object::Object() {}
+
+	Object::Object(glm::vec3 pos) : Object() {
+		setPosition(pos);
+	}
+
+	Object::Object(glm::vec3 pos, glm::vec3 angle) : Object(pos) {
+		setRotation(angle);
+	}
+
+	void Object::transform(glm::mat4 T) {
+		modelTransform = T;
+	}
+
+	glm::mat4 Object::getPositionTransform() { return positionTransform; }
+
+	void Object::updatePositionTransform() {
+		glm::mat4 T = glm::mat4(1.0f);
+		positionTransform = glm::translate(T, position);
+	}
+
+	void Object::setPosition(glm::vec3 pos) {
+		position = pos;
+		updatePositionTransform();
+	}
+
+	void Object::translate(glm::vec3 dpos) {
+		position += dpos;
+		updatePositionTransform();
+	}
+
+	glm::mat4 Object::getRotationTransform() { return rotationTransform; }
+
+	void Object::updateRotationTransform() {
+		float x_Ang, y_Ang, z_Ang;
+		x_Ang = angle[0];
+		y_Ang = angle[1];
+		z_Ang = angle[2];
+
+		glm::mat4 T = glm::mat4(1.0f);
+		T = glm::rotate(T, glm::radians(x_Ang), glm::vec3(1.0f, 0.0f, 0.0f));
+		T = glm::rotate(T, glm::radians(y_Ang), glm::vec3(0.0f, 1.0f, 0.0f));
+		T = glm::rotate(T, glm::radians(z_Ang), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		rotationTransform = T;
+	}
+
+	void Object::setRotation(glm::vec3 ang) {
+		angle = ang;
+		updateRotationTransform();
+	}
+
+	void Object::rotate(glm::vec3 dangle) {
+		angle += dangle;
+		updateRotationTransform();
+	}
 
 	// Scene
-	Scene::Scene(GLFWwindow* win) {
+	Scene::Scene(GLFWwindow* win) : camera(win) {
 		window = win;	
 
-		setFOV(DEFAULT_FOV);
+		camera.setFOV(DEFAULT_FOV);
 	}
 
 	Scene::Scene(GLFWwindow* win, std::vector<RenderObject> ROs) : Scene(win) {
@@ -25,19 +82,32 @@ namespace Renderer {
 		renderObjects.push_back(ro);
 	}
 
-	void Scene::setFOV(float fov) {
-		int width, height;
-		glfwGetWindowSize(window, &width, &height);
-		projectionTransform = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
-	}
-
-	void Scene::setCamera(glm::vec3 pos) {
-		cameraTransform = glm::translate(cameraTransform, pos); 
+	void Scene::setCamera(Camera cam) {
+		camera = cam;
 	}
 
 	void Scene::render() {
 		for ( RenderObject ro: renderObjects ) 
-			ro.render(window, cameraTransform, projectionTransform);
+			ro.render(window, camera);
+	}
+
+	// Camera
+	Camera::Camera(GLFWwindow* win) {
+		window = win;
+	}
+
+	Camera::Camera(GLFWwindow* win, glm::vec3 pos) : Camera(win) {
+		setPosition(pos);
+	}
+
+	Camera::Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle) : Camera(win, pos) {
+		setRotation(angle);
+	}
+
+	void Camera::setFOV(float fov) {
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		projection = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
 	}
 
 	// RenderObject
@@ -82,23 +152,32 @@ namespace Renderer {
 
 	void RenderObject::preRenderHook() {}
 
-	void RenderObject::render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform) {
-		glm::mat4 posT = glm::mat4(1.0f);
-		posT = glm::translate(posT, position);
+	// TODO: Make prerender instead of render
+	void RenderObject::render(GLFWwindow* win, Camera cam) {
+		shader.setMat4("position", getPositionTransform());
+		shader.setMat4("rotation", getRotationTransform());
 
-		shader.setMat4("baseModel", posT);
-		shader.setMat4("view", cameraTransform);
-		shader.setMat4("projection", projectionTransform);
+		shader.setMat4("view", cam.view);
+		shader.setMat4("projection", cam.projection);
 
 		shader.use();
-
-		preRenderHook();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glDrawArrays(GL_TRIANGLES, 0, indicesVec.size());
 	}
 
+	void RenderObject::setPosition(glm::vec3 pos) {
+		Object::setPosition(pos);
+		shader.setMat4("position", getPositionTransform());
+	}
+
+	void RenderObject::setRotation(glm::vec3 angle) {
+		Object::setRotation(angle);
+		shader.setMat4("rotation", getRotationTransform());
+	}
+
 	void RenderObject::transform(glm::mat4 T) {
+		Object::transform(T);
 		shader.setMat4("model", T);
 	}
 

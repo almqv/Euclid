@@ -149,17 +149,17 @@ int main() {
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	Renderer::TexturedObject ro(verts, indices);
-	ro.position = glm::vec3(0.2f, -1.0f, -4.0f);
+	ro.setPosition(glm::vec3(0.2f, -1.0f, -4.0f));
 
 	Renderer::TexturedObject ro2(verts, indices);
-	ro2.position = glm::vec3(0.5f, 0.0, -2.0f);
+	ro2.setPosition(glm::vec3(0.5f, 0.0, -2.0f));
 
-	ro2.setTexture("assets/textures/meep.jpg");
 	ro.setTexture(RUSTY_METAL_TEXTURE);
+	ro2.setTexture("assets/textures/meep.jpg");
 
 	scene.spawnObject(ro);
 	scene.spawnObject(ro2);
-	scene.setCamera(glm::vec3(0.0f, 0.0f, -8.0f));
+	scene.camera.setPosition(glm::vec3(0.0f, 0.0f, -8.0f));
 
 	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
@@ -169,18 +169,17 @@ int main() {
 		// rendering
 		renderCallback();
 
-		/* OBJECT RENDERING */
 		float time = glfwGetTime();
 		float gVal = sin(time) / 10.5f;
-		scene.setCamera(glm::vec3(gVal/10.0f, 0.0f, 0.0f));
 
-		// Transformation
+		// Move the camera left and right
+		scene.camera.setPosition(glm::vec3(gVal/10.0f, 0.0f, 0.0f));
+
+		// Move the objects & stuff 
 		float rotang = time;
+		ro.rotate(glm::vec3(time, 0.0f, time));
 
-		glm::mat4 T = glm::mat4(1.0f);
-		T = glm::rotate(T, rotang, glm::vec3(1.0, 0.0, 1.0));
-		ro.transform(T);
-
+		// Render new frame
 		scene.render();
 
 		// glfw

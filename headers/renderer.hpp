@@ -19,15 +19,56 @@
 #define FAR_PLANE 100.0f
 
 namespace Renderer {
-	class RenderObject {
+	class Object {
 		public:
-			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+			Object();
+			Object(glm::vec3 pos);
+			Object(glm::vec3 pos, glm::vec3 angle);
 
-			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
-			void render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform);
-			void setRotation(float angle, glm::vec3 axis);
+			glm::mat4 getPositionTransform();
+			void setPosition(glm::vec3 pos);
+			void translate(glm::vec3 dpos);
+
+			glm::mat4 getRotationTransform();
+			void setRotation(glm::vec3 angle);
+			void rotate(glm::vec3 dangle);
+
 			void transform(glm::mat4 T);
+		private:
+			void updatePositionTransform();
+			void updateRotationTransform();
+
+			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 angle = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::mat4 positionTransform = glm::mat4(1.0f);
+			glm::mat4 rotationTransform = glm::mat4(1.0f);
+			glm::mat4 modelTransform = glm::mat4(1.0f);
+	};
+
+	class Camera : public Object {
+		public:
+			Camera(GLFWwindow* win);
+			Camera(GLFWwindow* win, glm::vec3 pos);
+			Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
+
+			void setFOV(float deg);
+
+			glm::mat4 view = glm::mat4(1.0f);
+			glm::mat4 projection = glm::mat4(1.0f);
+		private:
+			GLFWwindow* window;
+	};
+
+
+	class RenderObject : public Object {
+		public:
+			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
+			void render(GLFWwindow* win, Camera cam);
 			void preRenderHook();
+			void transform(glm::mat4 T);
+
+			void setPosition(glm::vec3 pos);
+			void setRotation(glm::vec3 angle);
 		private:
 			Shaders::Shader shader;
 			unsigned int EBO;
@@ -39,18 +80,17 @@ namespace Renderer {
 
 	class Scene {
 		public:
+			Camera camera;
+
 			Scene(GLFWwindow* win);
 			Scene(GLFWwindow* win, std::vector<RenderObject> ROs);
 
-			void setCamera(glm::vec3 pos);
-			void setFOV(float deg);
+			void setCamera(Camera cam);
 			void spawnObject(RenderObject ro);
 			void render();
 		private:
 			std::vector<RenderObject> renderObjects = std::vector<RenderObject>();
 			GLFWwindow* window;
-			glm::mat4 cameraTransform = glm::mat4(1.0f);
-			glm::mat4 projectionTransform = glm::mat4(1.0f);
 	};
 
 	class TexturedObject : public RenderObject {
