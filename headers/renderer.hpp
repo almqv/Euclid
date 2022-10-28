@@ -21,8 +21,11 @@
 namespace Renderer {
 	class RenderObject {
 		public:
+			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+
 			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
 			void render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform);
+			void setRotation(float angle, glm::vec3 axis);
 			void transform(glm::mat4 T);
 			void preRenderHook();
 		private:

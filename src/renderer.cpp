@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "GLFW/glfw3.h"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/fwd.hpp"
 #include "renderer.hpp"
 #include "shaders.hpp"
 
@@ -58,13 +60,11 @@ namespace Renderer {
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, vertsVec.size() * sizeof(vertsVec[0]), vertsArray, GL_DYNAMIC_DRAW); // for moving stuff
-		// printf("%u\n", sizeof(vertsVec[0]) * vertsVec.size());
 
 		// Copy the indices for the verts into another buffer
 		glGenBuffers(1, &EBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesVec.size() * sizeof(indicesVec[0]), indicesArray, GL_STATIC_DRAW);
-		// printf("%u\n",indicesVec.size() * sizeof(indicesVec[0]));
 
 		// Shader stuff
 		// Pos
@@ -83,6 +83,10 @@ namespace Renderer {
 	void RenderObject::preRenderHook() {}
 
 	void RenderObject::render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform) {
+		glm::mat4 posT = glm::mat4(1.0f);
+		posT = glm::translate(posT, position);
+
+		shader.setMat4("baseModel", posT);
 		shader.setMat4("view", cameraTransform);
 		shader.setMat4("projection", projectionTransform);
 
