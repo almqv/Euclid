@@ -29,13 +29,11 @@ namespace Textures {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		printf("[%i] \"%s\" - ", id, texture_src);
 		unsigned char* data = stbi_load(texture_src, &width, &height, &nrChannels, 0);
 		
 		if (data) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
-			printf("Loaded!\n");
 			loaded = true;
 		} else {
 			printf("[ERROR] Failed to load texture \"%s\"\n", texture_src);

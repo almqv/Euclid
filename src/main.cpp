@@ -49,6 +49,8 @@ int main() {
 		return 1;
 	}
 
+	Renderer::Renderer3D renderer(win);
+
 	glfwMakeContextCurrent(win);
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
@@ -56,18 +58,18 @@ int main() {
 		return 1;
 	}
 
-	float verts[] = {
+	std::vector<float> verts({
 		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 
 		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f
-	};
+	});
 	// Vert struc: x y z  r g b  tx ty
 
-	unsigned int indices[] = {  
+	std::vector<unsigned int> indices({  
 		0, 1, 3, 
 		1, 2, 3	
-	};  
+	});  
 
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
@@ -75,7 +77,9 @@ int main() {
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	Renderer::Obj2D ro(indices, sizeof(indices), verts, sizeof(verts));
+	Renderer::Obj2D ro(verts, indices);
+	renderer.spawnObject(ro);
+	renderer.setCamera(glm::vec3(0.0f, 0.0f, -8.0f));
 	ro.setTexture(RUSTY_METAL_TEXTURE);
 
 	// Window width & height
@@ -88,7 +92,8 @@ int main() {
 
 		/* OBJECT RENDERING */
 		float time = glfwGetTime();
-		float gVal = (sin(time) / 1.5f) + 0.5f;
+		float gVal = sin(time) / 10.5f;
+		renderer.setCamera(glm::vec3(0.0f, 0.0f, -gVal));
 
 		// Transformation
 		float rotang = time;
@@ -97,7 +102,8 @@ int main() {
 		T = glm::rotate(T, rotang, glm::vec3(1.0, 0.0, 1.0));
 		T = glm::scale(T, glm::vec3(0.5, 0.5, 0.5));
 		ro.transform(T);
-		ro.render(win);
+
+		renderer.render();
 
 		// glfw
 		glfwSwapBuffers(win);
