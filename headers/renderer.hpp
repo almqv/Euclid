@@ -24,6 +24,7 @@ namespace Renderer {
 			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
 			void render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform);
 			void transform(glm::mat4 T);
+			void preRenderHook();
 		private:
 			Shaders::Shader shader;
 			unsigned int EBO;
@@ -49,20 +50,13 @@ namespace Renderer {
 			glm::mat4 projectionTransform = glm::mat4(1.0f);
 	};
 
-	class Obj2D {
+	class Obj2D : public RenderObject {
 		public:
-			Shaders::Shader shader;
-			Textures::Texture2D texture;
-
-			Obj2D(unsigned int indices[], unsigned int icount, float verts[], unsigned int vcount);
-
+			using RenderObject::RenderObject;
 			void setTexture(const char* t_src);
-			void transform(glm::mat4 T);
-			void render(GLFWwindow* win);
+			void preRenderHook();
 		private:
+			Textures::Texture2D texture;
 			void bind_texture(Textures::Texture2D texture);
-			unsigned int EBO;
-			unsigned int VBO;
-			unsigned int VAO;
 	};
 }

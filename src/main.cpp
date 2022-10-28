@@ -77,9 +77,10 @@ int main() {
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	Renderer::RenderObject ro(verts, indices);
+	Renderer::Obj2D ro(verts, indices);
 	renderer.spawnObject(ro);
-	// ro.setTexture(RUSTY_METAL_TEXTURE);
+	renderer.setCamera(glm::vec3(0.0f, 0.0f, -8.0f));
+	ro.setTexture(RUSTY_METAL_TEXTURE);
 
 	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
@@ -91,7 +92,8 @@ int main() {
 
 		/* OBJECT RENDERING */
 		float time = glfwGetTime();
-		float gVal = (sin(time) / 1.5f) + 0.5f;
+		float gVal = sin(time) / 10.5f;
+		renderer.setCamera(glm::vec3(0.0f, 0.0f, -gVal));
 
 		// Transformation
 		float rotang = time;

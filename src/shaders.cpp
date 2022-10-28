@@ -81,10 +81,10 @@ namespace Shaders {
 	Shader::Shader(const char* vertPath, const char* fragPath) {
 		unsigned int vertShader = compileFromFile(GL_VERTEX_SHADER, vertPath);
 		unsigned int fragShader = compileFromFile(GL_FRAGMENT_SHADER, fragPath);
-		unsigned int shaders[2] = {vertShader, fragShader};
+		std::vector<unsigned int> shaders({vertShader, fragShader});
 
 		// Shader program ID
-		id = Shaders::createProgram( std::vector<unsigned int> (std::begin(shaders), std::end(shaders)) );
+		id = Shaders::createProgram(shaders);
 	}
 
 	void Shader::use() { glUseProgram(id); }
