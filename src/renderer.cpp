@@ -91,7 +91,8 @@ namespace Renderer {
 		preRenderHook();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glDrawElements(GL_TRIANGLES, indicesVec.size(), GL_UNSIGNED_INT, 0);
+		// glDrawElements(GL_TRIANGLES, indicesVec.size(), GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, indicesVec.size());
 	}
 
 	void RenderObject::transform(glm::mat4 T) {
@@ -106,6 +107,7 @@ namespace Renderer {
 
 	void Obj2D::preRenderHook() {
 		printf("OBJ2D was here!\n");
+		printf("Now has texture: %s", texture.texture_src);
 		if (texture.loaded)
 			texture.bind();
 	}

@@ -58,17 +58,89 @@ int main() {
 		return 1;
 	}
 
+	// std::vector<float> verts({
+	// 	 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 
+	// 	 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	// 	-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	// 	-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	// });
+
 	std::vector<float> verts({
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 
-		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
 	});
 	// Vert struc: x y z  r g b  tx ty
 
 	std::vector<unsigned int> indices({  
 		0, 1, 3, 
-		1, 2, 3	
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
 	});  
 
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -78,9 +150,14 @@ int main() {
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	Renderer::Obj2D ro(verts, indices);
-	renderer.spawnObject(ro);
-	renderer.setCamera(glm::vec3(0.0f, 0.0f, -8.0f));
+	Renderer::Obj2D ro2(verts, indices);
+
+	ro2.setTexture("assets/textures/meep.jpg");
 	ro.setTexture(RUSTY_METAL_TEXTURE);
+
+	renderer.spawnObject(ro);
+	renderer.spawnObject(ro2);
+	renderer.setCamera(glm::vec3(0.0f, 0.0f, -4.0f));
 
 	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
@@ -93,7 +170,7 @@ int main() {
 		/* OBJECT RENDERING */
 		float time = glfwGetTime();
 		float gVal = sin(time) / 10.5f;
-		renderer.setCamera(glm::vec3(0.0f, 0.0f, -gVal));
+		renderer.setCamera(glm::vec3(0.0f, 0.0f, gVal/10.0f));
 
 		// Transformation
 		float rotang = time;
