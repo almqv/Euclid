@@ -10,32 +10,32 @@
 
 namespace Renderer {
 
-	// Renderer3D
-	Renderer3D::Renderer3D(GLFWwindow* win) {
+	// Scene
+	Scene::Scene(GLFWwindow* win) {
 		window = win;	
 
 		setFOV(DEFAULT_FOV);
 	}
 
-	Renderer3D::Renderer3D(GLFWwindow* win, std::vector<RenderObject> ROs) : Renderer3D(win) {
+	Scene::Scene(GLFWwindow* win, std::vector<RenderObject> ROs) : Scene(win) {
 		renderObjects = ROs;
 	}
 
-	void Renderer3D::spawnObject(RenderObject ro) {
+	void Scene::spawnObject(RenderObject ro) {
 		renderObjects.push_back(ro);
 	}
 
-	void Renderer3D::setFOV(float fov) {
+	void Scene::setFOV(float fov) {
 		int width, height;
 		glfwGetWindowSize(window, &width, &height);
 		projectionTransform = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
 	}
 
-	void Renderer3D::setCamera(glm::vec3 pos) {
+	void Scene::setCamera(glm::vec3 pos) {
 		cameraTransform = glm::translate(cameraTransform, pos); 
 	}
 
-	void Renderer3D::render() {
+	void Scene::render() {
 		for ( RenderObject ro: renderObjects ) 
 			ro.render(window, cameraTransform, projectionTransform);
 	}
@@ -95,7 +95,6 @@ namespace Renderer {
 		preRenderHook();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		// glDrawElements(GL_TRIANGLES, indicesVec.size(), GL_UNSIGNED_INT, 0);
 		glDrawArrays(GL_TRIANGLES, 0, indicesVec.size());
 	}
 
@@ -103,21 +102,21 @@ namespace Renderer {
 		shader.setMat4("model", T);
 	}
 
-	// Obj2D
-	void Obj2D::setTexture(const char* t_src) {
+	// TexturedObject
+	void TexturedObject::setTexture(const char* t_src) {
 		texture.texture_src = t_src;
 		texture.load();
 	}
 
-	void Obj2D::preRenderHook() {
-		printf("OBJ2D was here!\n");
+	void TexturedObject::preRenderHook() {
+		printf("TexturedObject was here!\n");
 		printf("Now has texture: %s", texture.texture_src);
 		if (texture.loaded)
 			texture.bind();
 	}
 
 	// Private stuff
-	void Obj2D::bind_texture(Textures::Texture2D new_texture) {
+	void TexturedObject::bind_texture(Textures::Texture2D new_texture) {
 		texture = new_texture;
 	}
 }

@@ -7,16 +7,10 @@
 #include <vector>
 #include <math.h>
 
-#include "../headers/renderer.hpp"
-#include "glm/trigonometric.hpp"
-// #include "../headers/shaders.hpp"
-// #include "../headers/textures.hpp"
+#include "renderer.hpp"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
-
-#define VERT_SHADER_SRC_FILE "shaders/vertex.glsl"
-#define FRAG_SHADER_SRC_FILE "shaders/fragment.glsl"
 
 #define RUSTY_METAL_TEXTURE "assets/textures/rusty_metal.jpg"
 
@@ -49,7 +43,7 @@ int main() {
 		return 1;
 	}
 
-	Renderer::Renderer3D renderer(win);
+	Renderer::Scene scene(win);
 
 	glfwMakeContextCurrent(win);
 
@@ -57,13 +51,6 @@ int main() {
 		printf("Failed to init GLAD.\n");
 		return 1;
 	}
-
-	// std::vector<float> verts({
-	// 	 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 
-	// 	 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	// 	-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	// 	-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	// });
 
 	std::vector<float> verts({
 		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
@@ -161,16 +148,18 @@ int main() {
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	Renderer::Obj2D ro(verts, indices);
-	Renderer::Obj2D ro2(verts, indices);
-	ro.position = glm::vec3(-1.0f, -1.0f, -4.0f);
+	Renderer::TexturedObject ro(verts, indices);
+	ro.position = glm::vec3(0.2f, -1.0f, -4.0f);
+
+	Renderer::TexturedObject ro2(verts, indices);
+	ro2.position = glm::vec3(0.5f, 0.0, -2.0f);
 
 	ro2.setTexture("assets/textures/meep.jpg");
 	ro.setTexture(RUSTY_METAL_TEXTURE);
 
-	renderer.spawnObject(ro);
-	// renderer.spawnObject(ro2);
-	renderer.setCamera(glm::vec3(0.0f, 0.0f, -4.0f));
+	scene.spawnObject(ro);
+	scene.spawnObject(ro2);
+	scene.setCamera(glm::vec3(0.0f, 0.0f, -8.0f));
 
 	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
@@ -183,18 +172,16 @@ int main() {
 		/* OBJECT RENDERING */
 		float time = glfwGetTime();
 		float gVal = sin(time) / 10.5f;
-		renderer.setCamera(glm::vec3(0.0f, 0.0f, gVal/10.0f));
+		scene.setCamera(glm::vec3(gVal/10.0f, 0.0f, 0.0f));
 
 		// Transformation
 		float rotang = time;
 
 		glm::mat4 T = glm::mat4(1.0f);
 		T = glm::rotate(T, rotang, glm::vec3(1.0, 0.0, 1.0));
-		T = glm::scale(T, glm::vec3(0.5, 0.5, 0.5));
 		ro.transform(T);
-		// ro2.transform(T);
 
-		renderer.render();
+		scene.render();
 
 		// glfw
 		glfwSwapBuffers(win);

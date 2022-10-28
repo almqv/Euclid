@@ -37,10 +37,10 @@ namespace Renderer {
 			std::vector<unsigned int> indicesVec;
 	};
 
-	class Renderer3D {
+	class Scene {
 		public:
-			Renderer3D(GLFWwindow* win);
-			Renderer3D(GLFWwindow* win, std::vector<RenderObject> ROs);
+			Scene(GLFWwindow* win);
+			Scene(GLFWwindow* win, std::vector<RenderObject> ROs);
 
 			void setCamera(glm::vec3 pos);
 			void setFOV(float deg);
@@ -53,7 +53,7 @@ namespace Renderer {
 			glm::mat4 projectionTransform = glm::mat4(1.0f);
 	};
 
-	class Obj2D : public RenderObject {
+	class TexturedObject : public RenderObject {
 		public:
 			using RenderObject::RenderObject;
 			void setTexture(const char* t_src);
