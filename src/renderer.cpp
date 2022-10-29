@@ -1,41 +1,123 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 #include "GLFW/glfw3.h"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/gtx/string_cast.hpp"
+#include "glm/fwd.hpp"
 #include "renderer.hpp"
 #include "shaders.hpp"
 
 namespace Renderer {
+	// Object
+	Object::Object() {}
 
-	// Renderer3D
-	Renderer3D::Renderer3D(GLFWwindow* win) {
-		window = win;	
-
-		setFOV(DEFAULT_FOV);
+	Object::Object(glm::vec3 pos) : Object() {
+		setPosition(pos);
 	}
 
-	Renderer3D::Renderer3D(GLFWwindow* win, std::vector<RenderObject> ROs) : Renderer3D(win) {
+	Object::Object(glm::vec3 pos, glm::vec3 angle) : Object(pos) {
+		setRotation(angle);
+	}
+
+	glm::mat4 Object::getModelTransform() { return modelTransform; }
+
+	void Object::scale(glm::vec3 vscale) {
+		glm::mat4 T = glm::mat4(1.0f);
+		T = glm::scale(T, vscale);
+		modelTransform = T;
+	}
+
+	void Object::transform(glm::mat4 T) {
+		modelTransform = T;
+	}
+
+	glm::mat4 Object::getPositionTransform() { return positionTransform; }
+
+	void Object::updatePositionTransform() {
+		glm::mat4 T = glm::mat4(1.0f);
+		positionTransform = glm::translate(T, position);
+	}
+
+	void Object::setPosition(glm::vec3 pos) {
+		position = pos;
+		updatePositionTransform();
+	}
+
+	void Object::translate(glm::vec3 dpos) {
+		position += dpos;
+		updatePositionTransform();
+	}
+
+	glm::mat4 Object::getRotationTransform() { return rotationTransform; }
+
+	void Object::updateRotationTransform() {
+		float x_Ang, y_Ang, z_Ang;
+		x_Ang = angle[0];
+		y_Ang = angle[1];
+		z_Ang = angle[2];
+
+		glm::mat4 T = glm::mat4(1.0f);
+		T = glm::rotate(T, glm::radians(x_Ang), glm::vec3(1.0f, 0.0f, 0.0f));
+		T = glm::rotate(T, glm::radians(y_Ang), glm::vec3(0.0f, 1.0f, 0.0f));
+		T = glm::rotate(T, glm::radians(z_Ang), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		rotationTransform = T;
+	}
+
+	void Object::setRotation(glm::vec3 ang) {
+		angle = ang;
+		updateRotationTransform();
+	}
+
+	void Object::rotate(glm::vec3 dangle) {
+		angle += dangle;
+		updateRotationTransform();
+	}
+
+	// Scene
+	Scene::Scene(GLFWwindow* win) : camera(win) {
+		window = win;	
+
+		camera.setFOV(DEFAULT_FOV);
+	}
+
+	Scene::Scene(GLFWwindow* win, std::vector<RenderObject*> ROs) : Scene(win) {
 		renderObjects = ROs;
 	}
 
-	void Renderer3D::spawnObject(RenderObject ro) {
+	void Scene::spawnObject(RenderObject *ro) {
 		renderObjects.push_back(ro);
 	}
 
-	void Renderer3D::setFOV(float fov) {
+	void Scene::setCamera(Camera cam) {
+		camera = cam;
+	}
+
+	void Scene::render() {
+		for ( RenderObject *ro: renderObjects ) 
+			ro->render(window, camera);
+	}
+
+	// Camera
+	Camera::Camera(GLFWwindow* win) {
+		window = win;
+	}
+
+	Camera::Camera(GLFWwindow* win, glm::vec3 pos) : Camera(win) {
+		setPosition(pos);
+	}
+
+	Camera::Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle) : Camera(win, pos) {
+		setRotation(angle);
+	}
+
+	void Camera::setFOV(float fov) {
 		int width, height;
 		glfwGetWindowSize(window, &width, &height);
-		projectionTransform = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
-	}
-
-	void Renderer3D::setCamera(glm::vec3 pos) {
-		cameraTransform = glm::translate(cameraTransform, pos); 
-	}
-
-	void Renderer3D::render() {
-		for ( RenderObject ro: renderObjects ) 
-			ro.render(window, cameraTransform, projectionTransform);
+		projection = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
 	}
 
 	// RenderObject
@@ -58,13 +140,11 @@ namespace Renderer {
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, vertsVec.size() * sizeof(vertsVec[0]), vertsArray, GL_DYNAMIC_DRAW); // for moving stuff
-		// printf("%u\n", sizeof(vertsVec[0]) * vertsVec.size());
 
 		// Copy the indices for the verts into another buffer
 		glGenBuffers(1, &EBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesVec.size() * sizeof(indicesVec[0]), indicesArray, GL_STATIC_DRAW);
-		// printf("%u\n",indicesVec.size() * sizeof(indicesVec[0]));
 
 		// Shader stuff
 		// Pos
@@ -82,36 +162,35 @@ namespace Renderer {
 
 	void RenderObject::preRenderHook() {}
 
-	void RenderObject::render(GLFWwindow* win, glm::mat4 cameraTransform, glm::mat4 projectionTransform) {
-		shader.setMat4("view", cameraTransform);
-		shader.setMat4("projection", projectionTransform);
+	// TODO: Make prerender instead of render
+	void RenderObject::render(GLFWwindow* win, Camera cam) {
+		shader.setMat4("modelPosition", getPositionTransform());
+		shader.setMat4("modelRotation", getRotationTransform());
+		shader.setMat4("model", getModelTransform());
+
+		shader.setMat4("camPos", cam.getPositionTransform());
+		shader.setMat4("camRot", cam.getRotationTransform());
+		shader.setMat4("camProjection", cam.projection);
 
 		shader.use();
 
-		preRenderHook();
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glDrawElements(GL_TRIANGLES, indicesVec.size(), GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, indicesVec.size());
 	}
 
-	void RenderObject::transform(glm::mat4 T) {
-		shader.setMat4("model", T);
-	}
-
-	// Obj2D
-	void Obj2D::setTexture(const char* t_src) {
+	// TexturedObject
+	void TexturedObject::setTexture(const char* t_src) {
 		texture.texture_src = t_src;
 		texture.load();
 	}
 
-	void Obj2D::preRenderHook() {
-		printf("OBJ2D was here!\n");
+	void TexturedObject::preRenderHook() {
 		if (texture.loaded)
 			texture.bind();
 	}
 
 	// Private stuff
-	void Obj2D::bind_texture(Textures::Texture2D new_texture) {
+	void TexturedObject::bind_texture(Textures::Texture2D new_texture) {
 		texture = new_texture;
 	}
 }

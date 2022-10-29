@@ -7,16 +7,10 @@
 #include <vector>
 #include <math.h>
 
-#include "../headers/renderer.hpp"
-#include "glm/trigonometric.hpp"
-// #include "../headers/shaders.hpp"
-// #include "../headers/textures.hpp"
+#include "renderer.hpp"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
-
-#define VERT_SHADER_SRC_FILE "shaders/vertex.glsl"
-#define FRAG_SHADER_SRC_FILE "shaders/fragment.glsl"
 
 #define RUSTY_METAL_TEXTURE "assets/textures/rusty_metal.jpg"
 
@@ -33,8 +27,10 @@ void processInput(GLFWwindow *win) {
 
 void renderCallback() {
 	// Make background
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	// glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 int main() {
@@ -49,8 +45,6 @@ int main() {
 		return 1;
 	}
 
-	Renderer::Renderer3D renderer(win);
-
 	glfwMakeContextCurrent(win);
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
@@ -59,30 +53,116 @@ int main() {
 	}
 
 	std::vector<float> verts({
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 
-		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
 	});
 	// Vert struc: x y z  r g b  tx ty
 
 	std::vector<unsigned int> indices({  
 		0, 1, 3, 
-		1, 2, 3	
+		1, 2, 3,
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
+		0, 1, 3, 
+		3, 4, 5, 
+		5, 6, 7, 
+		7, 8, 9, 
+		9, 10, 11, 
+		11, 12, 13,
 	});  
 
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
+	glEnable(GL_DEPTH_TEST);  
 
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	Renderer::Obj2D ro(verts, indices);
-	renderer.spawnObject(ro);
-	renderer.setCamera(glm::vec3(0.0f, 0.0f, -8.0f));
+	// Create scene
+	Renderer::Scene scene(win);
+
+	Renderer::TexturedObject ro(verts, indices);
+	ro.setPosition(glm::vec3(0.2f, -1.0f, -8.0f));
+
+	Renderer::TexturedObject ro2(verts, indices);
+	ro2.setPosition(glm::vec3(0.5f, 0.0, -8.0f));
+
+	ro2.setTexture("assets/textures/meep.jpg");
 	ro.setTexture(RUSTY_METAL_TEXTURE);
 
-	// Window width & height
+	scene.spawnObject(&ro);
+	scene.spawnObject(&ro2);
+
 	while (!glfwWindowShouldClose(win)) {
 		// Handle input
 		processInput(win);
@@ -90,20 +170,19 @@ int main() {
 		// rendering
 		renderCallback();
 
-		/* OBJECT RENDERING */
 		float time = glfwGetTime();
-		float gVal = sin(time) / 10.5f;
-		renderer.setCamera(glm::vec3(0.0f, 0.0f, -gVal));
+		float gVal = sin(time);
 
-		// Transformation
+		// Move the camera left and right
+		scene.camera.setRotation(glm::vec3(0.0f, 5.0f, 0.0f));
+		scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.02f + gVal/100.0f));
+
+		// Move the objects & stuff 
 		float rotang = time;
+		ro.translate(glm::vec3(0.0f, 0.0f, -0.021f));
 
-		glm::mat4 T = glm::mat4(1.0f);
-		T = glm::rotate(T, rotang, glm::vec3(1.0, 0.0, 1.0));
-		T = glm::scale(T, glm::vec3(0.5, 0.5, 0.5));
-		ro.transform(T);
-
-		renderer.render();
+		// Render new frame
+		scene.render();
 
 		// glfw
 		glfwSwapBuffers(win);

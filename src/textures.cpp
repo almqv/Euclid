@@ -19,7 +19,7 @@ namespace Textures {
 	void Texture2D::load() {
 		// Bind this texture
 		glGenTextures(1, &id);
-		glBindTexture(GL_TEXTURE_2D, id);
+		bind();
 
 		// Repeat/bounded etc
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
