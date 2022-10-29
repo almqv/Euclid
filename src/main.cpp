@@ -157,7 +157,7 @@ int main() {
 	Renderer::TexturedObject ro2(verts, indices);
 	ro2.setPosition(glm::vec3(0.5f, 0.0, -8.0f));
 
-	ro2.setTexture("assets/textures/meep.jpg");
+	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
 	ro.setTexture(RUSTY_METAL_TEXTURE);
 
 	scene.spawnObject(&ro);
@@ -174,12 +174,12 @@ int main() {
 		float gVal = sin(time);
 
 		// Move the camera left and right
-		scene.camera.setRotation(glm::vec3(0.0f, 5.0f, 0.0f));
-		scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.02f + gVal/100.0f));
+		scene.camera.setRotation(glm::vec3(gVal * 5, 5.0f * gVal, gVal * 10.0f));
+		// scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.02f + gVal/100.0f));
 
 		// Move the objects & stuff 
 		float rotang = time;
-		ro.translate(glm::vec3(0.0f, 0.0f, -0.021f));
+		ro.rotate(glm::vec3(0.0f, 0.0f, gVal));
 
 		// Render new frame
 		scene.render();
