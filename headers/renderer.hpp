@@ -79,13 +79,13 @@ namespace Renderer {
 			Camera camera;
 
 			Scene(GLFWwindow* win);
-			Scene(GLFWwindow* win, std::vector<RenderObject> ROs);
+			Scene(GLFWwindow* win, std::vector<RenderObject*> ROs);
 
 			void setCamera(Camera cam);
-			void spawnObject(RenderObject ro);
+			void spawnObject(RenderObject *ro);
 			void render();
 		private:
-			std::vector<RenderObject> renderObjects = std::vector<RenderObject>();
+			std::vector<RenderObject*> renderObjects = std::vector<RenderObject*>();
 			GLFWwindow* window;
 	};
 

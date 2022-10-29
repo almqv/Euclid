@@ -43,9 +43,7 @@ namespace Renderer {
 
 	void Object::setPosition(glm::vec3 pos) {
 		position = pos;
-		std::cout << "New pos: " << glm::to_string(pos) << " vs. " << glm::to_string(position) << std::endl;
 		updatePositionTransform();
-		std::cout << "Updated positionTransform: " << glm::to_string(positionTransform) << std::endl;
 	}
 
 	void Object::translate(glm::vec3 dpos) {
@@ -67,8 +65,6 @@ namespace Renderer {
 		T = glm::rotate(T, glm::radians(z_Ang), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		rotationTransform = T;
-		// std::cout << "Name: " << name << " | ";
-		// std::cout << glm::to_string(T) << std::endl;
 	}
 
 	void Object::setRotation(glm::vec3 ang) {
@@ -88,11 +84,11 @@ namespace Renderer {
 		camera.setFOV(DEFAULT_FOV);
 	}
 
-	Scene::Scene(GLFWwindow* win, std::vector<RenderObject> ROs) : Scene(win) {
+	Scene::Scene(GLFWwindow* win, std::vector<RenderObject*> ROs) : Scene(win) {
 		renderObjects = ROs;
 	}
 
-	void Scene::spawnObject(RenderObject ro) {
+	void Scene::spawnObject(RenderObject *ro) {
 		renderObjects.push_back(ro);
 	}
 
@@ -101,8 +97,8 @@ namespace Renderer {
 	}
 
 	void Scene::render() {
-		for ( RenderObject ro: renderObjects ) 
-			ro.render(window, camera);
+		for ( RenderObject *ro: renderObjects ) 
+			ro->render(window, camera);
 	}
 
 	// Camera
@@ -176,8 +172,6 @@ namespace Renderer {
 		shader.setMat4("camRot", cam.getRotationTransform());
 		shader.setMat4("camProjection", cam.projection);
 
-		std::cout << "Rendered positionTransform:" << glm::to_string(getPositionTransform()) << std::endl;
-
 		shader.use();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -191,8 +185,6 @@ namespace Renderer {
 	}
 
 	void TexturedObject::preRenderHook() {
-		printf("TexturedObject was here!\n");
-		printf("Now has texture: %s", texture.texture_src);
 		if (texture.loaded)
 			texture.bind();
 	}
