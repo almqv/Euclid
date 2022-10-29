@@ -154,11 +154,12 @@ namespace Renderer {
 
 	// TODO: Make prerender instead of render
 	void RenderObject::render(GLFWwindow* win, Camera cam) {
-		shader.setMat4("position", getPositionTransform());
-		shader.setMat4("rotation", getRotationTransform());
+		shader.setMat4("modelPosition", getPositionTransform());
+		shader.setMat4("modelRotation", getRotationTransform());
 
-		shader.setMat4("view", cam.view);
-		shader.setMat4("projection", cam.projection);
+		shader.setMat4("camPos", cam.getPositionTransform());
+		shader.setMat4("camRot", cam.getRotationTransform());
+		shader.setMat4("camProjection", cam.projection);
 
 		shader.use();
 

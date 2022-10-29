@@ -52,8 +52,6 @@ namespace Renderer {
 			Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
 
 			void setFOV(float deg);
-
-			glm::mat4 view = glm::mat4(1.0f);
 			glm::mat4 projection = glm::mat4(1.0f);
 		private:
 			GLFWwindow* window;

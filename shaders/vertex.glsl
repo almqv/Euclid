@@ -6,14 +6,17 @@ layout (location = 2) in vec2 aTexCoord;
 out vec4 VertexColor;
 out vec2 TexCoord;
 
-uniform mat4 rotation = mat4(1.0);
-uniform mat4 position = mat4(1.0);
+uniform mat4 modelRotation = mat4(1.0);
+uniform mat4 modelPosition = mat4(1.0);
 uniform mat4 model = mat4(1.0);
-uniform mat4 view = mat4(1.0);
-uniform mat4 projection = mat4(1.0);
+
+uniform mat4 camPos = mat4(1.0);
+uniform mat4 camRot = mat4(1.0);
+uniform mat4 camProjection = mat4(1.0);
 
 void main() {
-	gl_Position = projection * view * position * rotation * model * vec4(aPos, 1.0);
+	//			  projection 	  {	view		  }   {				model				    }
+	gl_Position = camProjection * (camPos * camRot) * modelPosition * modelRotation * model * vec4(aPos, 1.0);
 	VertexColor = vec4(aColor, 1.0);
 	TexCoord = aTexCoord;
 } 

@@ -43,8 +43,6 @@ int main() {
 		return 1;
 	}
 
-	Renderer::Scene scene(win);
-
 	glfwMakeContextCurrent(win);
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
@@ -148,6 +146,9 @@ int main() {
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
+	// Create scene
+	Renderer::Scene scene(win);
+
 	Renderer::TexturedObject ro(verts, indices);
 	ro.setPosition(glm::vec3(0.2f, -1.0f, -4.0f));
 
@@ -160,6 +161,7 @@ int main() {
 	scene.spawnObject(ro);
 	scene.spawnObject(ro2);
 	scene.camera.setPosition(glm::vec3(0.0f, 0.0f, -8.0f));
+	scene.camera.setFOV(60.0f);
 
 	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
@@ -170,10 +172,11 @@ int main() {
 		renderCallback();
 
 		float time = glfwGetTime();
-		float gVal = sin(time) / 10.5f;
+		float gVal = sin(time);
 
 		// Move the camera left and right
-		scene.camera.setPosition(glm::vec3(gVal/10.0f, 0.0f, 0.0f));
+		scene.camera.setPosition(glm::vec3(gVal, 0.0f, 0.0f));
+		scene.camera.rotate(glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Move the objects & stuff 
 		float rotang = time;
