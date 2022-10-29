@@ -1,9 +1,11 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 #include "GLFW/glfw3.h"
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/gtx/string_cast.hpp"
 #include "glm/fwd.hpp"
 #include "renderer.hpp"
 #include "shaders.hpp"
@@ -55,6 +57,8 @@ namespace Renderer {
 		T = glm::rotate(T, glm::radians(z_Ang), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		rotationTransform = T;
+		// std::cout << "Name: " << name << " | ";
+		// std::cout << glm::to_string(T) << std::endl;
 	}
 
 	void Object::setRotation(glm::vec3 ang) {
@@ -161,6 +165,9 @@ namespace Renderer {
 		shader.setMat4("camRot", cam.getRotationTransform());
 		shader.setMat4("camProjection", cam.projection);
 
+		std::cout << "Name: " << name << " | ";
+		std::cout << glm::to_string(getPositionTransform()) << std::endl;
+
 		shader.use();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -169,12 +176,12 @@ namespace Renderer {
 
 	void RenderObject::setPosition(glm::vec3 pos) {
 		Object::setPosition(pos);
-		shader.setMat4("position", getPositionTransform());
+		shader.setMat4("modelPosition", getPositionTransform());
 	}
 
 	void RenderObject::setRotation(glm::vec3 angle) {
 		Object::setRotation(angle);
-		shader.setMat4("rotation", getRotationTransform());
+		shader.setMat4("modelRotation", getRotationTransform());
 	}
 
 	void RenderObject::transform(glm::mat4 T) {

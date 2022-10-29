@@ -150,18 +150,17 @@ int main() {
 	Renderer::Scene scene(win);
 
 	Renderer::TexturedObject ro(verts, indices);
-	ro.setPosition(glm::vec3(0.2f, -1.0f, -4.0f));
+	ro.setPosition(glm::vec3(0.2f, -1.0f, -8.0f));
+	ro.name = "Hej";
 
 	Renderer::TexturedObject ro2(verts, indices);
-	ro2.setPosition(glm::vec3(0.5f, 0.0, -2.0f));
+	ro2.setPosition(glm::vec3(0.5f, 0.0, -8.0f));
 
 	ro.setTexture(RUSTY_METAL_TEXTURE);
 	ro2.setTexture("assets/textures/meep.jpg");
 
 	scene.spawnObject(ro);
-	scene.spawnObject(ro2);
-	scene.camera.setPosition(glm::vec3(0.0f, 0.0f, -8.0f));
-	scene.camera.setFOV(60.0f);
+	// scene.spawnObject(ro2);
 
 	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
@@ -175,12 +174,16 @@ int main() {
 		float gVal = sin(time);
 
 		// Move the camera left and right
-		scene.camera.setPosition(glm::vec3(gVal, 0.0f, 0.0f));
-		scene.camera.rotate(glm::vec3(0.0f, 0.0f, 1.0f));
+		// scene.camera.setPosition(glm::vec3(0.0f, 0.0f, 8*gVal-4.0f));
+		scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.01f));
+		scene.camera.setRotation(glm::vec3(0.0f, 5.0f, 0.0f));
+		//scene.camera.rotate(glm::vec3(0.0f, -0.4f, 0.0f));
 
 		// Move the objects & stuff 
 		float rotang = time;
-		ro.rotate(glm::vec3(time, 0.0f, time));
+		// ro.setRotation(glm::vec3(time*10, 0.0f, time));
+		ro.translate(glm::vec3(0.0f, 0.0f, -0.015f));
+		ro.rotate(glm::vec3(20.0f, 0.0f, 0.0f));
 
 		// Render new frame
 		scene.render();

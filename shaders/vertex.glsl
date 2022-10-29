@@ -16,7 +16,7 @@ uniform mat4 camProjection = mat4(1.0);
 
 void main() {
 	//			  projection 	  {	view		  }   {				model				    }
-	gl_Position = camProjection * (camPos * camRot) * modelPosition * modelRotation * model * vec4(aPos, 1.0);
+	gl_Position = camProjection * (camRot * camPos) * (modelRotation * modelPosition * model) * vec4(aPos, 1.0);
 	VertexColor = vec4(aColor, 1.0);
 	TexCoord = aTexCoord;
 } 

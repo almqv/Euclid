@@ -14,13 +14,14 @@
 #define VERT_SHADER_SRC_FILE "shaders/vertex.glsl"
 #define FRAG_SHADER_SRC_FILE "shaders/fragment.glsl"
 
-#define DEFAULT_FOV 45.0f
+#define DEFAULT_FOV 60.0f
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
 namespace Renderer {
 	class Object {
 		public:
+			const char* name = "Object";
 			Object();
 			Object(glm::vec3 pos);
 			Object(glm::vec3 pos, glm::vec3 angle);
@@ -34,10 +35,10 @@ namespace Renderer {
 			void rotate(glm::vec3 dangle);
 
 			void transform(glm::mat4 T);
-		private:
 			void updatePositionTransform();
 			void updateRotationTransform();
 
+		private:
 			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 angle = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::mat4 positionTransform = glm::mat4(1.0f);
@@ -47,6 +48,7 @@ namespace Renderer {
 
 	class Camera : public Object {
 		public:
+			const char* name = "Camera";
 			Camera(GLFWwindow* win);
 			Camera(GLFWwindow* win, glm::vec3 pos);
 			Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
@@ -60,6 +62,7 @@ namespace Renderer {
 
 	class RenderObject : public Object {
 		public:
+			const char* name = "RenderObject";
 			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
 			void render(GLFWwindow* win, Camera cam);
 			void preRenderHook();
@@ -93,6 +96,7 @@ namespace Renderer {
 
 	class TexturedObject : public RenderObject {
 		public:
+			const char* name = "TexturedObject";
 			using RenderObject::RenderObject;
 			void setTexture(const char* t_src);
 			void preRenderHook();
