@@ -22,6 +22,14 @@ namespace Renderer {
 		setRotation(angle);
 	}
 
+	glm::mat4 Object::getModelTransform() { return modelTransform; }
+
+	void Object::scale(glm::vec3 vscale) {
+		glm::mat4 T = glm::mat4(1.0f);
+		T = glm::scale(T, vscale);
+		modelTransform = T;
+	}
+
 	void Object::transform(glm::mat4 T) {
 		modelTransform = T;
 	}
@@ -35,7 +43,9 @@ namespace Renderer {
 
 	void Object::setPosition(glm::vec3 pos) {
 		position = pos;
+		std::cout << "New pos: " << glm::to_string(pos) << " vs. " << glm::to_string(position) << std::endl;
 		updatePositionTransform();
+		std::cout << "Updated positionTransform: " << glm::to_string(positionTransform) << std::endl;
 	}
 
 	void Object::translate(glm::vec3 dpos) {
@@ -160,33 +170,18 @@ namespace Renderer {
 	void RenderObject::render(GLFWwindow* win, Camera cam) {
 		shader.setMat4("modelPosition", getPositionTransform());
 		shader.setMat4("modelRotation", getRotationTransform());
+		shader.setMat4("model", getModelTransform());
 
 		shader.setMat4("camPos", cam.getPositionTransform());
 		shader.setMat4("camRot", cam.getRotationTransform());
 		shader.setMat4("camProjection", cam.projection);
 
-		std::cout << "Name: " << name << " | ";
-		std::cout << glm::to_string(getPositionTransform()) << std::endl;
+		std::cout << "Rendered positionTransform:" << glm::to_string(getPositionTransform()) << std::endl;
 
 		shader.use();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glDrawArrays(GL_TRIANGLES, 0, indicesVec.size());
-	}
-
-	void RenderObject::setPosition(glm::vec3 pos) {
-		Object::setPosition(pos);
-		shader.setMat4("modelPosition", getPositionTransform());
-	}
-
-	void RenderObject::setRotation(glm::vec3 angle) {
-		Object::setRotation(angle);
-		shader.setMat4("modelRotation", getRotationTransform());
-	}
-
-	void RenderObject::transform(glm::mat4 T) {
-		Object::transform(T);
-		shader.setMat4("model", T);
 	}
 
 	// TexturedObject

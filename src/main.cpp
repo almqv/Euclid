@@ -27,7 +27,9 @@ void processInput(GLFWwindow *win) {
 
 void renderCallback() {
 	// Make background
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	// glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -151,7 +153,6 @@ int main() {
 
 	Renderer::TexturedObject ro(verts, indices);
 	ro.setPosition(glm::vec3(0.2f, -1.0f, -8.0f));
-	ro.name = "Hej";
 
 	Renderer::TexturedObject ro2(verts, indices);
 	ro2.setPosition(glm::vec3(0.5f, 0.0, -8.0f));
@@ -162,7 +163,6 @@ int main() {
 	scene.spawnObject(ro);
 	// scene.spawnObject(ro2);
 
-	// Window width & height
 	while (!glfwWindowShouldClose(win)) {
 		// Handle input
 		processInput(win);
@@ -175,15 +175,16 @@ int main() {
 
 		// Move the camera left and right
 		// scene.camera.setPosition(glm::vec3(0.0f, 0.0f, 8*gVal-4.0f));
-		scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.01f));
+		// scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.01f));
 		scene.camera.setRotation(glm::vec3(0.0f, 5.0f, 0.0f));
-		//scene.camera.rotate(glm::vec3(0.0f, -0.4f, 0.0f));
+		// scene.camera.rotate(glm::vec3(0.0f, -0.4f, 0.0f));
 
 		// Move the objects & stuff 
 		float rotang = time;
 		// ro.setRotation(glm::vec3(time*10, 0.0f, time));
-		ro.translate(glm::vec3(0.0f, 0.0f, -0.015f));
-		ro.rotate(glm::vec3(20.0f, 0.0f, 0.0f));
+		// ro.translate(glm::vec3(0.0f, 0.0f, -0.015f));
+		ro.setPosition(glm::vec3(10.0f, 0.0f, 0.0f));
+		// ro.rotate(glm::vec3(20.0f, 0.0f, 0.0f));
 
 		// Render new frame
 		scene.render();
