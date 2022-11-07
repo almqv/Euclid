@@ -18,6 +18,8 @@
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
+#define CAM_SPEED 0.05f
+
 namespace Renderer {
 	class Object {
 		public:
@@ -58,6 +60,7 @@ namespace Renderer {
 			glm::mat4 view = glm::mat4(1.0f);
 		private:
 			GLFWwindow* window;
+			// glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
 	};
 
 

@@ -177,12 +177,12 @@ int main() {
 		// scene.camera.setRotation(glm::vec3(gVal * 5, 5.0f * gVal, gVal * 20.0f));
 		// scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.02f + gVal/100.0f));
 		scene.camera.pointAt(glm::vec3(0.0f, 0.0f, 0.0f));
-		scene.camera.setPosition(glm::vec3(cos(time)*10.0f, 0.0f, gVal*10.0f));
+		float radius = 10.0f;
+		scene.camera.setPosition(glm::vec3(cos(time) * radius, 0.0f, sin(time) * radius));
 
 		// Move the objects & stuff 
 		float rotang = time;
-		ro.rotate(glm::vec3(0.0f, 0.0f, gVal));
-
+		ro.rotate(glm::vec3(gVal, 0.0f, gVal));
 		ro2.setPosition(glm::vec3(0.0f, gVal * 2.0f, 1.0f + gVal*5.0f));
 
 		// Render new frame
