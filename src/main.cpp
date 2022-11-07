@@ -7,6 +7,7 @@
 #include <vector>
 #include <math.h>
 
+#include "controller.hpp"
 #include "renderer.hpp"
 
 #define WINDOW_WIDTH 640
@@ -14,23 +15,106 @@
 
 #define RUSTY_METAL_TEXTURE "assets/textures/rusty_metal.jpg"
 
+std::vector<float> verts({
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+
+	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+
+	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+
+	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+
+	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+
+	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+
+	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
+});
+// Vert struc: x y z  r g b  tx ty
+
+std::vector<unsigned int> indices({  
+	0, 1, 3, 
+	1, 2, 3,
+	5, 6, 7, 
+	7, 8, 9, 
+	9, 10, 11, 
+	11, 12, 13,
+	0, 1, 3, 
+	3, 4, 5, 
+	5, 6, 7, 
+	7, 8, 9, 
+	9, 10, 11, 
+	11, 12, 13,
+	0, 1, 3, 
+	3, 4, 5, 
+	5, 6, 7, 
+	7, 8, 9, 
+	9, 10, 11, 
+	11, 12, 13,
+	0, 1, 3, 
+	3, 4, 5, 
+	5, 6, 7, 
+	7, 8, 9, 
+	9, 10, 11, 
+	11, 12, 13,
+	0, 1, 3, 
+	3, 4, 5, 
+	5, 6, 7, 
+	7, 8, 9, 
+	9, 10, 11, 
+	11, 12, 13,
+});
+
 void framebuffer_size_callback(GLFWwindow* win, int w, int h) {
 	glViewport(0, 0, w, h);
 }
+
+void mouse_callback(GLFWwindow* win, double x, double y) {}
 
 void processInput(GLFWwindow *win) {
 	int action = glfwGetKey(win, GLFW_KEY_ESCAPE);
 	if (action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(win, true);
 	}
-}
-
-void renderCallback() {
-	// Make background
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	// glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 int main() {
@@ -52,98 +136,14 @@ int main() {
 		return 1;
 	}
 
-	std::vector<float> verts({
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-
-
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-
-
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-
-
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
-	});
-	// Vert struc: x y z  r g b  tx ty
-
-	std::vector<unsigned int> indices({  
-		0, 1, 3, 
-		1, 2, 3,
-		5, 6, 7, 
-		7, 8, 9, 
-		9, 10, 11, 
-		11, 12, 13,
-		0, 1, 3, 
-		3, 4, 5, 
-		5, 6, 7, 
-		7, 8, 9, 
-		9, 10, 11, 
-		11, 12, 13,
-		0, 1, 3, 
-		3, 4, 5, 
-		5, 6, 7, 
-		7, 8, 9, 
-		9, 10, 11, 
-		11, 12, 13,
-		0, 1, 3, 
-		3, 4, 5, 
-		5, 6, 7, 
-		7, 8, 9, 
-		9, 10, 11, 
-		11, 12, 13,
-		0, 1, 3, 
-		3, 4, 5, 
-		5, 6, 7, 
-		7, 8, 9, 
-		9, 10, 11, 
-		11, 12, 13,
-	});  
-
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
+	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback); // Framebuffer
+
 	glEnable(GL_DEPTH_TEST);  
+
+	// Input
+	glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
+	glfwSetCursorPosCallback(win, mouse_callback); // Mouse capture callback
 
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
@@ -163,27 +163,17 @@ int main() {
 	scene.spawnObject(&ro);
 	scene.spawnObject(&ro2);
 
+	// Controller test
+	Controller player(win, glm::vec3(0.0f, 0.0f, -8.0f));
+	scene.setCamera(&player);
+
 	while (!glfwWindowShouldClose(win)) {
 		// Handle input
+		player.processInput(scene.deltaTime);
 		processInput(win);
 
-		// rendering
-		renderCallback();
-
-		float time = glfwGetTime();
-		float gVal = sin(time);
-
-		// Move the camera left and right
-		// scene.camera.setRotation(glm::vec3(gVal * 5, 5.0f * gVal, gVal * 20.0f));
-		// scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.02f + gVal/100.0f));
-		scene.camera.pointAt(glm::vec3(0.0f, 0.0f, 0.0f));
-		float radius = 10.0f;
-		scene.camera.setPosition(glm::vec3(cos(time) * radius, 0.0f, sin(time) * radius));
-
-		// Move the objects & stuff 
-		float rotang = time;
-		ro.rotate(glm::vec3(gVal, 0.0f, gVal));
-		ro2.setPosition(glm::vec3(0.0f, gVal * 2.0f, 1.0f + gVal*5.0f));
+		ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
+		// ro2.setPosition(glm::vec3(0.0f, 0.0f, -1000.0f));
 
 		// Render new frame
 		scene.render();

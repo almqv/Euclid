@@ -18,8 +18,6 @@
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
-#define CAM_SPEED 0.05f
-
 namespace Renderer {
 	class Object {
 		public:
@@ -35,6 +33,7 @@ namespace Renderer {
 
 			void setRotation(glm::vec3 angle);
 			void rotate(glm::vec3 dangle);
+
 		protected:
 			void updatePositionTransform();
 			void updateRotationTransform();
@@ -42,25 +41,26 @@ namespace Renderer {
 			glm::mat4 positionTransform = glm::mat4(1.0f);
 			glm::mat4 rotationTransform = glm::mat4(1.0f);
 			glm::mat4 modelTransform = glm::mat4(1.0f);
-
 			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 angle = glm::vec3(0.0f, 0.0f, 0.0f);
 	};
 
 	class Camera : public Object {
-		Camera(GLFWwindow* win);
-		Camera(GLFWwindow* win, glm::vec3 pos);
-		Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
-
 		public:
-			void setFOV(float deg);
-			void pointAt(glm::vec3 target);
-
 			glm::mat4 projection = glm::mat4(1.0f);
 			glm::mat4 view = glm::mat4(1.0f);
-		private:
+
+			Camera(GLFWwindow* win);
+			Camera(GLFWwindow* win, glm::vec3 pos);
+			Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
+
+			void setFOV(float deg);
+		protected:
 			GLFWwindow* window;
-			// glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
+			glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
+			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+			void updateCameraTransforms();
 	};
 
 
@@ -80,17 +80,20 @@ namespace Renderer {
 
 	class Scene {
 		public:
-			Camera camera;
+			float deltaTime = 0.0f;
 
 			Scene(GLFWwindow* win);
 			Scene(GLFWwindow* win, std::vector<RenderObject*> ROs);
 
-			void setCamera(Camera cam);
+			void setCamera(Camera *cam);
 			void spawnObject(RenderObject *ro);
 			void render();
+		protected:
+			Camera *camera;
 		private:
 			std::vector<RenderObject*> renderObjects = std::vector<RenderObject*>();
 			GLFWwindow* window;
+			float lastFrame = 0.0f;
 	};
 
 	class TexturedObject : public RenderObject {
