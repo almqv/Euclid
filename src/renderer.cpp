@@ -43,8 +43,7 @@ namespace Renderer {
 	}
 
 	void Object::translate(glm::vec3 dpos) {
-		position += dpos;
-		updatePositionTransform();
+		setPosition(position + dpos);
 	}
 
 	void Object::updateRotationTransform() {
@@ -68,15 +67,12 @@ namespace Renderer {
 	}
 
 	void Object::rotate(glm::vec3 dangle) {
-		angle += dangle;
-		updateRotationTransform();
+		setRotation(angle + dangle);
 	}
 
 	// Scene
-	Scene::Scene(GLFWwindow* win) : camera(win) {
+	Scene::Scene(GLFWwindow* win) {
 		window = win;	
-
-		camera.setFOV(DEFAULT_FOV);
 	}
 
 	Scene::Scene(GLFWwindow* win, std::vector<RenderObject*> ROs) : Scene(win) {
@@ -87,18 +83,29 @@ namespace Renderer {
 		renderObjects.push_back(ro);
 	}
 
-	void Scene::setCamera(Camera cam) {
+	void Scene::setCamera(Camera *cam) {
 		camera = cam;
 	}
 
 	void Scene::render() {
+		// Record deltaTime
+		float curFrame = glfwGetTime();
+		deltaTime = curFrame - lastFrame;
+
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		for ( RenderObject *ro: renderObjects ) 
-			ro->render(window, camera);
+			ro->render(window, *camera);
+
+		// Record the last frame
+		lastFrame = curFrame;
 	}
 
 	// Camera
 	Camera::Camera(GLFWwindow* win) {
 		window = win;
+		setFOV(DEFAULT_FOV);
 	}
 
 	Camera::Camera(GLFWwindow* win, glm::vec3 pos) : Camera(win) {
@@ -115,10 +122,9 @@ namespace Renderer {
 		projection = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
 	}
 
-	void Camera::pointAt(glm::vec3 target) {
-		view = glm::lookAt(position, target, glm::vec3(0.0f, 1.0f, 0.0f));
+	void Camera::updateCameraTransforms() {
+		view = glm::lookAt(position, position + front, up);
 	}
-
 
 	// RenderObject
 	RenderObject::RenderObject(std::vector<float> verts, std::vector<unsigned int> indices) 
