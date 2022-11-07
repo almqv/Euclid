@@ -25,26 +25,24 @@ namespace Renderer {
 			Object(glm::vec3 pos);
 			Object(glm::vec3 pos, glm::vec3 angle);
 
-			glm::mat4 getModelTransform();
 			void transform(glm::mat4 T);
 			void scale(glm::vec3 vscale);
 
-			glm::mat4 getPositionTransform();
 			void setPosition(glm::vec3 pos);
 			void translate(glm::vec3 dpos);
 
-			glm::mat4 getRotationTransform();
 			void setRotation(glm::vec3 angle);
 			void rotate(glm::vec3 dangle);
-		private:
+		protected:
 			void updatePositionTransform();
 			void updateRotationTransform();
 
-			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 angle = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::mat4 positionTransform = glm::mat4(1.0f);
 			glm::mat4 rotationTransform = glm::mat4(1.0f);
 			glm::mat4 modelTransform = glm::mat4(1.0f);
+
+			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 angle = glm::vec3(0.0f, 0.0f, 0.0f);
 	};
 
 	class Camera : public Object {
@@ -54,7 +52,10 @@ namespace Renderer {
 			Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
 
 			void setFOV(float deg);
+			void pointAt(glm::vec3 target);
+
 			glm::mat4 projection = glm::mat4(1.0f);
+			glm::mat4 view = glm::mat4(1.0f);
 		private:
 			GLFWwindow* window;
 	};

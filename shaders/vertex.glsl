@@ -10,13 +10,12 @@ uniform mat4 modelRotation = mat4(1.0);
 uniform mat4 modelPosition = mat4(1.0);
 uniform mat4 model = mat4(1.0);
 
-uniform mat4 camPos = mat4(1.0);
-uniform mat4 camRot = mat4(1.0);
-uniform mat4 camProjection = mat4(1.0);
+uniform mat4 view = mat4(1.0);
+uniform mat4 projection = mat4(1.0);
 
 void main() {
-	//			  projection 	  {	view		  }   {				model				    }
-	gl_Position = camProjection * (camRot * camPos) * (modelRotation * modelPosition * model) * vec4(aPos, 1.0);
+	//			  projection 	  view 	 {				model				   }
+	gl_Position = projection * view * (modelRotation * modelPosition * model) * vec4(aPos, 1.0);
 	VertexColor = vec4(aColor, 1.0);
 	TexCoord = aTexCoord;
 } 

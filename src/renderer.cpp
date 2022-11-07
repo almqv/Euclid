@@ -22,8 +22,6 @@ namespace Renderer {
 		setRotation(angle);
 	}
 
-	glm::mat4 Object::getModelTransform() { return modelTransform; }
-
 	void Object::scale(glm::vec3 vscale) {
 		glm::mat4 T = glm::mat4(1.0f);
 		T = glm::scale(T, vscale);
@@ -33,8 +31,6 @@ namespace Renderer {
 	void Object::transform(glm::mat4 T) {
 		modelTransform = T;
 	}
-
-	glm::mat4 Object::getPositionTransform() { return positionTransform; }
 
 	void Object::updatePositionTransform() {
 		glm::mat4 T = glm::mat4(1.0f);
@@ -51,14 +47,13 @@ namespace Renderer {
 		updatePositionTransform();
 	}
 
-	glm::mat4 Object::getRotationTransform() { return rotationTransform; }
-
 	void Object::updateRotationTransform() {
 		float x_Ang, y_Ang, z_Ang;
 		x_Ang = angle[0];
 		y_Ang = angle[1];
 		z_Ang = angle[2];
 
+		// TODO: make better
 		glm::mat4 T = glm::mat4(1.0f);
 		T = glm::rotate(T, glm::radians(x_Ang), glm::vec3(1.0f, 0.0f, 0.0f));
 		T = glm::rotate(T, glm::radians(y_Ang), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -120,6 +115,11 @@ namespace Renderer {
 		projection = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
 	}
 
+	void Camera::pointAt(glm::vec3 target) {
+		view = glm::lookAt(position, target, glm::vec3(0.0f, 1.0f, 0.0f));
+	}
+
+
 	// RenderObject
 	RenderObject::RenderObject(std::vector<float> verts, std::vector<unsigned int> indices) 
 		: shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE) {
@@ -164,13 +164,12 @@ namespace Renderer {
 
 	// TODO: Make prerender instead of render
 	void RenderObject::render(GLFWwindow* win, Camera cam) {
-		shader.setMat4("modelPosition", getPositionTransform());
-		shader.setMat4("modelRotation", getRotationTransform());
-		shader.setMat4("model", getModelTransform());
+		shader.setMat4("modelPosition", positionTransform);
+		shader.setMat4("modelRotation", rotationTransform);
+		shader.setMat4("model", modelTransform);
 
-		shader.setMat4("camPos", cam.getPositionTransform());
-		shader.setMat4("camRot", cam.getRotationTransform());
-		shader.setMat4("camProjection", cam.projection);
+		shader.setMat4("view", cam.view);
+		shader.setMat4("projection", cam.projection);
 
 		shader.use();
 

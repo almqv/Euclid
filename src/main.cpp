@@ -27,9 +27,9 @@ void processInput(GLFWwindow *win) {
 
 void renderCallback() {
 	// Make background
-	// glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	// glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -152,10 +152,10 @@ int main() {
 	Renderer::Scene scene(win);
 
 	Renderer::TexturedObject ro(verts, indices);
-	ro.setPosition(glm::vec3(0.2f, -1.0f, -8.0f));
+	// ro.setPosition(glm::vec3(0.2f, -1.0f, -8.0f));
 
 	Renderer::TexturedObject ro2(verts, indices);
-	ro2.setPosition(glm::vec3(0.5f, 0.0, -8.0f));
+	// ro2.setPosition(glm::vec3(0.5f, 0.0, -8.0f));
 
 	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
 	ro.setTexture(RUSTY_METAL_TEXTURE);
@@ -174,12 +174,16 @@ int main() {
 		float gVal = sin(time);
 
 		// Move the camera left and right
-		scene.camera.setRotation(glm::vec3(gVal * 5, 5.0f * gVal, gVal * 10.0f));
+		// scene.camera.setRotation(glm::vec3(gVal * 5, 5.0f * gVal, gVal * 20.0f));
 		// scene.camera.translate(glm::vec3(0.0f, 0.0f, 0.02f + gVal/100.0f));
+		scene.camera.pointAt(glm::vec3(0.0f, 0.0f, 0.0f));
+		scene.camera.setPosition(glm::vec3(cos(time)*10.0f, 0.0f, gVal*10.0f));
 
 		// Move the objects & stuff 
 		float rotang = time;
 		ro.rotate(glm::vec3(0.0f, 0.0f, gVal));
+
+		ro2.setPosition(glm::vec3(0.0f, gVal * 2.0f, 1.0f + gVal*5.0f));
 
 		// Render new frame
 		scene.render();
