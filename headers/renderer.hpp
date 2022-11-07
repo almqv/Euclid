@@ -48,11 +48,11 @@ namespace Renderer {
 	};
 
 	class Camera : public Object {
-		public:
-			Camera(GLFWwindow* win);
-			Camera(GLFWwindow* win, glm::vec3 pos);
-			Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
+		Camera(GLFWwindow* win);
+		Camera(GLFWwindow* win, glm::vec3 pos);
+		Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
 
+		public:
 			void setFOV(float deg);
 			void pointAt(glm::vec3 target);
 
