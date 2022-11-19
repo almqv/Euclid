@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.24.2)
 
-project(Hohmann VERSION 1.0)
+project(Euclid VERSION 1.0)
 
 #### Sources
 file(GLOB HEADERS headers/*.hpp headers/*.h)
 file(GLOB SOURCES src/*.cpp src/*.c)
 
-add_executable(Hohmann src/main.cpp)
+add_executable(Euclid src/main.cpp)
 
 include_directories(headers)
-target_sources(Hohmann PRIVATE ${SOURCES})
+target_sources(Euclid PRIVATE ${SOURCES})
 
 #### Libs
 # GLFW 
@@ -30,4 +30,4 @@ include_directories(${EXTERN_SOURCES})
 link_directories(${EXTERN_SOURCES})
 
 #### Linking
-target_link_libraries(Hohmann PRIVATE glfw glad glm)
+target_link_libraries(Euclid PRIVATE glfw glad glm)

@@ -1,5 +1,5 @@
-# Hohmann
-Cool 3D stuff
+# Euclid 
+Basic & lightweight OpenGL 3D renderer.
 
 ## Preview
 Here is a super simple example of the renderer:
