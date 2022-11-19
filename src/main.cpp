@@ -9,9 +9,7 @@
 
 #include "controller.hpp"
 #include "renderer.hpp"
-
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#include "window.hpp"
 
 #define RUSTY_METAL_TEXTURE "assets/textures/rusty_metal.jpg"
 
@@ -108,8 +106,6 @@ void framebuffer_size_callback(GLFWwindow* win, int w, int h) {
 	glViewport(0, 0, w, h);
 }
 
-void mouse_callback(GLFWwindow* win, double x, double y) {}
-
 void processInput(GLFWwindow *win) {
 	int action = glfwGetKey(win, GLFW_KEY_ESCAPE);
 	if (action == GLFW_PRESS) {
@@ -143,7 +139,6 @@ int main() {
 
 	// Input
 	glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
-	glfwSetCursorPosCallback(win, mouse_callback); // Mouse capture callback
 
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
