@@ -5,9 +5,11 @@
 #include <vector>
 
 #include "shaders.hpp"
-#include "textures.hpp"
-
 #include "GLFW/glfw3.h"
+
+#include "textures.hpp"
+#include "window.hpp"
+
 
 #define VERTEX_ATTRIB_PTR_SIZE 8 * sizeof(float)
 
@@ -50,13 +52,13 @@ namespace Renderer {
 			glm::mat4 projection = glm::mat4(1.0f);
 			glm::mat4 view = glm::mat4(1.0f);
 
-			Camera(GLFWwindow* win);
-			Camera(GLFWwindow* win, glm::vec3 pos);
-			Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle);
+			Camera(Window* win);
+			Camera(Window* win, glm::vec3 pos);
+			Camera(Window* win, glm::vec3 pos, glm::vec3 angle);
 
 			void setFOV(float deg);
 		protected:
-			GLFWwindow* window;
+			Window* window;
 			glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
 			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -67,7 +69,7 @@ namespace Renderer {
 	class RenderObject : public Object {
 		public:
 			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
-			void render(GLFWwindow* win, Camera cam);
+			void render(Camera cam);
 			void preRenderHook();
 		private:
 			Shaders::Shader shader;
@@ -82,8 +84,8 @@ namespace Renderer {
 		public:
 			float deltaTime = 0.0f;
 
-			Scene(GLFWwindow* win);
-			Scene(GLFWwindow* win, std::vector<RenderObject*> ROs);
+			Scene(Window* win);
+			Scene(Window* win, std::vector<RenderObject*> ROs);
 
 			void setCamera(Camera *cam);
 			void spawnObject(RenderObject *ro);
@@ -92,7 +94,7 @@ namespace Renderer {
 			Camera *camera;
 		private:
 			std::vector<RenderObject*> renderObjects = std::vector<RenderObject*>();
-			GLFWwindow* window;
+			Window* window;
 			float lastFrame = 0.0f;
 	};
 

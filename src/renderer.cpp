@@ -71,11 +71,11 @@ namespace Renderer {
 	}
 
 	// Scene
-	Scene::Scene(GLFWwindow* win) {
+	Scene::Scene(Window* win) {
 		window = win;	
 	}
 
-	Scene::Scene(GLFWwindow* win, std::vector<RenderObject*> ROs) : Scene(win) {
+	Scene::Scene(Window* win, std::vector<RenderObject*> ROs) : Scene(win) {
 		renderObjects = ROs;
 	}
 
@@ -96,30 +96,28 @@ namespace Renderer {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for ( RenderObject *ro: renderObjects ) 
-			ro->render(window, *camera);
+			ro->render(*camera);
 
 		// Record the last frame
 		lastFrame = curFrame;
 	}
 
 	// Camera
-	Camera::Camera(GLFWwindow* win) {
+	Camera::Camera(Window* win) {
 		window = win;
 		setFOV(DEFAULT_FOV);
 	}
 
-	Camera::Camera(GLFWwindow* win, glm::vec3 pos) : Camera(win) {
+	Camera::Camera(Window* win, glm::vec3 pos) : Camera(win) {
 		setPosition(pos);
 	}
 
-	Camera::Camera(GLFWwindow* win, glm::vec3 pos, glm::vec3 angle) : Camera(win, pos) {
+	Camera::Camera(Window* win, glm::vec3 pos, glm::vec3 angle) : Camera(win, pos) {
 		setRotation(angle);
 	}
 
 	void Camera::setFOV(float fov) {
-		int width, height;
-		glfwGetWindowSize(window, &width, &height);
-		projection = glm::perspective(glm::radians(fov), (float)width / (float)height, NEAR_PLANE, FAR_PLANE);
+		projection = glm::perspective(glm::radians(fov), (float)window->width() / (float)window->height(), NEAR_PLANE, FAR_PLANE);
 	}
 
 	void Camera::updateCameraTransforms() {
@@ -169,7 +167,7 @@ namespace Renderer {
 	void RenderObject::preRenderHook() {}
 
 	// TODO: Make prerender instead of render
-	void RenderObject::render(GLFWwindow* win, Camera cam) {
+	void RenderObject::render(Camera cam) {
 		shader.setMat4("modelPosition", positionTransform);
 		shader.setMat4("modelRotation", rotationTransform);
 		shader.setMat4("model", modelTransform);

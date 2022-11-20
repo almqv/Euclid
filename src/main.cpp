@@ -114,43 +114,29 @@ void processInput(GLFWwindow *win) {
 }
 
 int main() {
-	glfwInit(); glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	GLFWwindow* win = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Euclid Engine: Demo", NULL, NULL);
-	if (win == NULL) {
-		printf("Failed to create a window.\n");
-		glfwTerminate();
-		return 1;
-	}
-
-	glfwMakeContextCurrent(win);
+	Window win("Euclid Engine: Demo");
+	win.spawn();
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
 		printf("Failed to init GLAD.\n");
 		return 1;
 	}
 
-	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-	glfwSetFramebufferSizeCallback(win, framebuffer_size_callback); // Framebuffer
+	glViewport(0, 0, win.width(), win.height());
+	glfwSetFramebufferSizeCallback(win.win, framebuffer_size_callback); // Framebuffer
 
 	glEnable(GL_DEPTH_TEST);  
 
 	// Input
-	glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
+	glfwSetInputMode(win.win, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
 
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	// Create scene
-	Renderer::Scene scene(win);
-
+	Renderer::Scene scene(&win);
 	Renderer::TexturedObject ro(verts, indices);
-	// ro.setPosition(glm::vec3(0.2f, -1.0f, -8.0f));
-
 	Renderer::TexturedObject ro2(verts, indices);
-	// ro2.setPosition(glm::vec3(0.5f, 0.0, -8.0f));
 
 	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
 	ro.setTexture(RUSTY_METAL_TEXTURE);
@@ -159,13 +145,13 @@ int main() {
 	scene.spawnObject(&ro2);
 
 	// Controller test
-	Controller player(win, glm::vec3(0.0f, 0.0f, -8.0f));
+	Controller player(&win, glm::vec3(0.0f, 0.0f, -8.0f));
 	scene.setCamera(&player);
 
-	while (!glfwWindowShouldClose(win)) {
+	while (!glfwWindowShouldClose(win.win)) {
 		// Handle input
 		player.processInput(scene.deltaTime);
-		processInput(win);
+		processInput(win.win);
 
 		ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
 		// ro2.setPosition(glm::vec3(0.0f, 0.0f, -1000.0f));
@@ -174,7 +160,7 @@ int main() {
 		scene.render();
 
 		// glfw
-		glfwSwapBuffers(win);
+		glfwSwapBuffers(win.win);
 		glfwPollEvents();
 	}
 

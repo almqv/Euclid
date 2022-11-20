@@ -8,7 +8,7 @@
 
 void Controller::processMouseInput(float deltaTime) {
 	double x, y;
-	glfwGetCursorPos(window, &x, &y); 	
+	glfwGetCursorPos(window->win, &x, &y); 	
 
 	if (firstMouseInput) {
 		lastX = x;
@@ -49,22 +49,22 @@ void Controller::processInput(float deltaTime) {
 
 	float cameraSpeed = deltaTime * 2.5f; 
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+	if (glfwGetKey(window->win, GLFW_KEY_W) == GLFW_PRESS) {
 		translate(cameraSpeed * front);
 	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+	if (glfwGetKey(window->win, GLFW_KEY_S) == GLFW_PRESS) {
 		translate(-cameraSpeed * front);
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+	if (glfwGetKey(window->win, GLFW_KEY_A) == GLFW_PRESS) {
 		translate(-glm::normalize(glm::cross(front, up)) * cameraSpeed);
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+	if (glfwGetKey(window->win, GLFW_KEY_D) == GLFW_PRESS) {
 		translate(glm::normalize(glm::cross(front, up)) * cameraSpeed);
 	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+	if (glfwGetKey(window->win, GLFW_KEY_SPACE) == GLFW_PRESS) {
 		translate(cameraSpeed * up);
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+	if (glfwGetKey(window->win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
 		translate(cameraSpeed * -up);
 	}
 }
