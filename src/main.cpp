@@ -138,14 +138,14 @@ int main() {
 	Renderer::TexturedObject ro(verts, indices);
 	Renderer::TexturedObject ro2(verts, indices);
 
-	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
 	ro.setTexture(RUSTY_METAL_TEXTURE);
+	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
 
 	scene.spawnObject(&ro);
 	scene.spawnObject(&ro2);
 
 	// Controller test
-	Controller player(&win, glm::vec3(0.0f, 0.0f, -8.0f));
+	Controller player(&win, glm::vec3(0.0f, 0.0f, 8.0f));
 	scene.setCamera(&player);
 
 	while (!glfwWindowShouldClose(win.win)) {

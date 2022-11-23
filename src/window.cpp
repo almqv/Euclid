@@ -17,6 +17,7 @@ void Window::spawn() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_FLOATING, GL_TRUE);
 
 	win = glfwCreateWindow(_width, _height, _title, NULL, NULL);
 	if (win == NULL) {

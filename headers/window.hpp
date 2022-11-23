@@ -3,8 +3,11 @@
 
 // Default window dimensions
 #define D_WINDOW_TITLE "Euclid Engine"
-#define D_WINDOW_WIDTH 640
-#define D_WINDOW_HEIGHT 480
+
+// #define D_WINDOW_WIDTH 640
+// #define D_WINDOW_HEIGHT 480
+#define D_WINDOW_WIDTH 1920
+#define D_WINDOW_HEIGHT 1080 
 
 class Window {
 	public:
