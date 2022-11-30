@@ -6,6 +6,8 @@
 #include <cmath>
 #include <cstdio>
 
+// TODO: move file into examples
+
 void Controller::processMouseInput(float deltaTime) {
 	double x, y;
 	glfwGetCursorPos(window->win, &x, &y); 	
@@ -41,8 +43,8 @@ void Controller::processMouseInput(float deltaTime) {
 
 	updateCameraTransforms();
 
-	printf("%f %f %f (pitch: %f yaw: %f)\n", position.x, position.y, position.z, pitch, yaw);
-}  
+	// printf("%f %f %f (pitch: %f yaw: %f)\n", position.x, position.y, position.z, pitch, yaw);
+}
 
 void Controller::processInput(float deltaTime) {
 	processMouseInput(deltaTime);

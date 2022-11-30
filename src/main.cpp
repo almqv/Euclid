@@ -102,8 +102,12 @@ std::vector<unsigned int> indices({
 	11, 12, 13,
 });
 
-void framebuffer_size_callback(GLFWwindow* win, int w, int h) {
-	glViewport(0, 0, w, h);
+
+// Window for the game
+Window win("Euclid Engine: Demo");
+
+void framebuffer_size_callback(GLFWwindow* glfwWindow, int w, int h) {
+	win.updateSize(w, h);
 }
 
 void processInput(GLFWwindow *win) {
@@ -114,7 +118,7 @@ void processInput(GLFWwindow *win) {
 }
 
 int main() {
-	Window win("Euclid Engine: Demo");
+	// Spawn window
 	win.spawn();
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {

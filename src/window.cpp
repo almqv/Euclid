@@ -1,5 +1,6 @@
 #include "window.hpp"
 #include "GLFW/glfw3.h"
+#include <GL/gl.h>
 #include <cstdlib>
 #include <stdio.h>
 
@@ -29,9 +30,11 @@ void Window::spawn() {
 	glfwMakeContextCurrent(win);
 }
 
-void Window::updateSize() {
-	int w, h;
-	glfwGetWindowSize(win, &w, &h);
+void Window::updateSize(int w, int h) {
+	// int w, h;
+	// glfwGetWindowSize(win, &w, &h);
 	_width = w;
 	_height = h;
+	glViewport(0, 0, w, h);
+	printf("New size: %i %i\n", w, h);
 }
