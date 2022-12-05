@@ -105,6 +105,7 @@ std::vector<unsigned int> indices({
 
 // Window for the game
 Window win("Euclid Engine: Demo");
+Renderer::Scene scene(&win);
 
 void framebuffer_size_callback(GLFWwindow* glfwWindow, int w, int h) {
 	win.updateSize(w, h);
@@ -138,12 +139,11 @@ int main() {
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	// Create scene
-	Renderer::Scene scene(&win);
 	Renderer::TexturedObject ro(verts, indices);
 	Renderer::TexturedObject ro2(verts, indices);
 
-	ro.setTexture(RUSTY_METAL_TEXTURE);
 	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
+	ro.setTexture(RUSTY_METAL_TEXTURE);
 
 	scene.spawnObject(&ro);
 	scene.spawnObject(&ro2);
