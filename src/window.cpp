@@ -14,7 +14,7 @@ Window::Window(const char* title, unsigned int w, unsigned int h) : Window(title
 }
 
 void Window::spawn() {
-	glfwInit(); 
+	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -31,8 +31,6 @@ void Window::spawn() {
 }
 
 void Window::updateSize(int w, int h) {
-	// int w, h;
-	// glfwGetWindowSize(win, &w, &h);
 	_width = w;
 	_height = h;
 	glViewport(0, 0, w, h);

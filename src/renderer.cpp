@@ -72,7 +72,7 @@ namespace Renderer {
 
 	// Scene
 	Scene::Scene(Window* win) {
-		window = win;	
+		window = win;
 	}
 
 	Scene::Scene(Window* win, std::vector<RenderObject*> ROs) : Scene(win) {
@@ -95,7 +95,7 @@ namespace Renderer {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		for ( RenderObject *ro: renderObjects ) 
+		for ( RenderObject *ro: renderObjects )
 			ro->render(*camera);
 
 		// Record the last frame
@@ -125,7 +125,7 @@ namespace Renderer {
 	}
 
 	// RenderObject
-	RenderObject::RenderObject(std::vector<float> verts, std::vector<unsigned int> indices) 
+	RenderObject::RenderObject(std::vector<float> verts, std::vector<unsigned int> indices)
 		: shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE) {
 		vertsVec = verts;
 		indicesVec = indices;
