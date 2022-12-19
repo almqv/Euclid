@@ -34,5 +34,4 @@ void Window::updateSize(int w, int h) {
 	_width = w;
 	_height = h;
 	glViewport(0, 0, w, h);
-	printf("New size: %i %i\n", w, h);
 }

@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <stdio.h>
 
 #include "GLFW/glfw3.h"
 #include "glm/ext/matrix_transform.hpp"
@@ -92,6 +93,8 @@ namespace Renderer {
 		float curFrame = glfwGetTime();
 		deltaTime = curFrame - lastFrame;
 
+		printf("\rdeltaTime=%f FPS=%f", deltaTime, 1/(deltaTime+0.0001f));
+
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -105,7 +108,7 @@ namespace Renderer {
 	// Camera
 	Camera::Camera(Window* win) {
 		window = win;
-		setFOV(DEFAULT_FOV);
+		FOV = DEFAULT_FOV;
 	}
 
 	Camera::Camera(Window* win, glm::vec3 pos) : Camera(win) {
@@ -116,8 +119,9 @@ namespace Renderer {
 		setRotation(angle);
 	}
 
-	void Camera::setFOV(float fov) {
-		projection = glm::perspective(glm::radians(fov), (float)window->width() / (float)window->height(), NEAR_PLANE, FAR_PLANE);
+	glm::mat4 Camera::getProjection() {
+		projection = glm::perspective(glm::radians(FOV), (float)window->width() / (float)window->height(), NEAR_PLANE, FAR_PLANE);
+		return projection;
 	}
 
 	void Camera::updateCameraTransforms() {
@@ -173,7 +177,7 @@ namespace Renderer {
 		shader.setMat4("model", modelTransform);
 
 		shader.setMat4("view", cam.view);
-		shader.setMat4("projection", cam.projection);
+		shader.setMat4("projection", cam.getProjection());
 
 		shader.use();
 

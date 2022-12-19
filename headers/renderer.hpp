@@ -49,20 +49,22 @@ namespace Renderer {
 
 	class Camera : public Object {
 		public:
-			glm::mat4 projection = glm::mat4(1.0f);
 			glm::mat4 view = glm::mat4(1.0f);
+			float FOV;
 
 			Camera(Window* win);
 			Camera(Window* win, glm::vec3 pos);
 			Camera(Window* win, glm::vec3 pos, glm::vec3 angle);
 
-			void setFOV(float deg);
+			glm::mat4 getProjection();
 		protected:
 			Window* window;
 			glm::vec3 front = glm::vec3(0.0f, 0.0f, 1.0f);
 			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 
 			void updateCameraTransforms();
+		private:
+			glm::mat4 projection = glm::mat4(1.0f);
 	};
 
 
@@ -82,7 +84,7 @@ namespace Renderer {
 
 	class Scene {
 		public:
-			float deltaTime = 0.0f;
+			float deltaTime = 0.0f; // Seconds
 
 			Scene(Window* win);
 			Scene(Window* win, std::vector<RenderObject*> ROs);
@@ -90,7 +92,7 @@ namespace Renderer {
 			void setCamera(Camera *cam);
 			void spawnObject(RenderObject *ro);
 			void render();
-		protected:
+		// protected:
 			Camera *camera;
 		private:
 			std::vector<RenderObject*> renderObjects = std::vector<RenderObject*>();
