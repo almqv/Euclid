@@ -14,92 +14,92 @@
 #define RUSTY_METAL_TEXTURE "assets/textures/rusty_metal.jpg"
 
 std::vector<float> verts({
-	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-
-
-	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 
 
-	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 
 
-	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 
 
-	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
-});
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
+    });
 // Vert struc: x y z  r g b  tx ty
 
 std::vector<unsigned int> indices({
-	0, 1, 3,
-	1, 2, 3,
-	5, 6, 7,
-	7, 8, 9,
-	9, 10, 11,
-	11, 12, 13,
-	0, 1, 3,
-	3, 4, 5,
-	5, 6, 7,
-	7, 8, 9,
-	9, 10, 11,
-	11, 12, 13,
-	0, 1, 3,
-	3, 4, 5,
-	5, 6, 7,
-	7, 8, 9,
-	9, 10, 11,
-	11, 12, 13,
-	0, 1, 3,
-	3, 4, 5,
-	5, 6, 7,
-	7, 8, 9,
-	9, 10, 11,
-	11, 12, 13,
-	0, 1, 3,
-	3, 4, 5,
-	5, 6, 7,
-	7, 8, 9,
-	9, 10, 11,
-	11, 12, 13,
+    0, 1, 3,
+    1, 2, 3,
+    5, 6, 7,
+    7, 8, 9,
+    9, 10, 11,
+    11, 12, 13,
+    0, 1, 3,
+    3, 4, 5,
+    5, 6, 7,
+    7, 8, 9,
+    9, 10, 11,
+    11, 12, 13,
+    0, 1, 3,
+    3, 4, 5,
+    5, 6, 7,
+    7, 8, 9,
+    9, 10, 11,
+    11, 12, 13,
+    0, 1, 3,
+    3, 4, 5,
+    5, 6, 7,
+    7, 8, 9,
+    9, 10, 11,
+    11, 12, 13,
+    0, 1, 3,
+    3, 4, 5,
+    5, 6, 7,
+    7, 8, 9,
+    9, 10, 11,
+    11, 12, 13,
 });
 
 
@@ -108,68 +108,68 @@ Window win("Euclid Engine: Demo");
 Renderer::Scene scene(&win);
 
 void framebuffer_size_callback(GLFWwindow* glfwWindow, int w, int h) {
-	win.updateSize(w, h);
+    win.updateSize(w, h);
 }
 
 void processInput(GLFWwindow *win) {
-	int action = glfwGetKey(win, GLFW_KEY_ESCAPE);
-	if (action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(win, true);
-	}
+    int action = glfwGetKey(win, GLFW_KEY_ESCAPE);
+    if (action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(win, true);
+    }
 }
 
 int main() {
-	// Spawn window
-	win.spawn();
+    // Spawn window
+    win.spawn();
 
-	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
-		printf("Failed to init GLAD.\n");
-		return 1;
-	}
+    if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
+        printf("Failed to init GLAD.\n");
+        return 1;
+    }
 
-	glViewport(0, 0, win.width(), win.height());
-	glfwSetFramebufferSizeCallback(win.win, framebuffer_size_callback); // Framebuffer
+    glViewport(0, 0, win.getWidth(), win.getHeight());
+    glfwSetFramebufferSizeCallback(win.getWindow(), framebuffer_size_callback); // Framebuffer
 
-	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
-	// Input
-	glfwSetInputMode(win.win, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
+    // Input
+    glfwSetInputMode(win.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
 
-	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	// Create scene
-	Renderer::TexturedObject ro(verts, indices);
-	Renderer::TexturedObject ro2(verts, indices);
+    // Create scene
+    Renderer::TexturedObject ro(verts, indices);
+    Renderer::TexturedObject ro2(verts, indices);
 
-	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
-	ro.setTexture(RUSTY_METAL_TEXTURE);
+    ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
+    ro.setTexture(RUSTY_METAL_TEXTURE);
 
-	scene.spawnObject(&ro);
-	scene.spawnObject(&ro2);
+    scene.spawnObject(&ro);
+    scene.spawnObject(&ro2);
 
-	// Controller test
-	Controller player(&win, glm::vec3(0.0f, 0.0f, 8.0f));
-	scene.setCamera(&player);
+    // Controller test
+    Controller player(&win, glm::vec3(0.0f, 0.0f, 8.0f));
+    scene.setCamera(&player);
 
-	while (!glfwWindowShouldClose(win.win)) {
-		// Handle input
-		player.processInput(scene.deltaTime);
-		processInput(win.win);
+    while (!glfwWindowShouldClose(win.getWindow())) {
+        // Handle input
+        player.processInput(scene.deltaTime);
+        processInput(win.getWindow());
 
-		ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
-		// ro2.translate(glm::vec3(0.0f, -0.01f, 0.01f));
-		ro2.translate(glm::vec3(0.0f, 0.0f, -0.001f));
-		ro2.rotate(glm::vec3(1.01f, 1.0f, 1.0f));
+        ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
+        // ro2.translate(glm::vec3(0.0f, -0.01f, 0.01f));
+        // ro2.translate(glm::vec3(0.0f, 0.0f, -0.001f));
+        ro2.rotate(glm::vec3(1.01f, 1.0f, 1.0f));
 
-		// Render new frame
-		scene.render();
+        // Render new frame
+        scene.render();
 
-		// glfw
-		glfwSwapBuffers(win.win);
-		glfwPollEvents();
-	}
+        // glfw
+        glfwSwapBuffers(win.getWindow());
+        glfwPollEvents();
+    }
 
-	glfwTerminate();
-	return 0;
+    glfwTerminate();
+    return 0;
 }

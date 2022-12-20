@@ -1,7 +1,7 @@
 #pragma once
-// #include "renderer.hpp"
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
+#include <map>
 
 // Default window dimensions
 #define D_WINDOW_TITLE "Euclid Engine"
@@ -11,19 +11,24 @@
 
 class Window {
 	public:
-		GLFWwindow* win;
-		// Renderer::Camera cam;
-
 		Window(const char* title);
 		Window(const char* title, unsigned int w, unsigned int h);
 
+		~Window();
+
 		void spawn();
 
-		unsigned int width()  { return _width; }  // getters and dumb and 
-		unsigned int height() { return _height; } // cpp should have readonly fields...
+		unsigned int getWidth()  { return _width; }  // getters and dumb and
+		unsigned int getHeight() { return _height; } // cpp should have readonly fields...
+		GLFWwindow* getWindow() { return _win; }
 
 		void updateSize(int w, int h);
+		void makeCurrent();
+		void swapBuffers();
 	private:
+		GLFWwindow* _win;
+		static std::map<GLFWwindow*, Window*> windowMap;
+
 		const char* _title = D_WINDOW_TITLE;
 		unsigned int _width = D_WINDOW_WIDTH;
 		unsigned int _height = D_WINDOW_HEIGHT;

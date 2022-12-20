@@ -120,7 +120,7 @@ namespace Renderer {
 	}
 
 	glm::mat4 Camera::getProjection() {
-		projection = glm::perspective(glm::radians(FOV), (float)window->width() / (float)window->height(), NEAR_PLANE, FAR_PLANE);
+		projection = glm::perspective(glm::radians(FOV), (float)window->getWidth() / (float)window->getHeight(), NEAR_PLANE, FAR_PLANE);
 		return projection;
 	}
 

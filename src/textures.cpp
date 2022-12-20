@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../headers/textures.hpp"
+#include "textures.hpp"
 #include <glad/glad.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -30,7 +30,7 @@ namespace Textures {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		unsigned char* data = stbi_load(texture_src, &width, &height, &nrChannels, 0);
-		
+
 		if (data) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
