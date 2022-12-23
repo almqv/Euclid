@@ -55,6 +55,11 @@ void Window::swapBuffers() {
 	glfwSwapBuffers(_win);
 }
 
+bool Window::shouldClose() {
+	return glfwWindowShouldClose(_win);
+}
+
+// Framebuffer Size Callback, called each time the window "updates"
 void Window::framebufferSizeCallback(GLFWwindow* win, int width, int height) {
 	windowMap[win]->updateSize(width, height);
 }

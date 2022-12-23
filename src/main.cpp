@@ -123,9 +123,6 @@ int main() {
 		return 1;
 	}
 
-	// glViewport(0, 0, win.getWidth(), win.getHeight());
-	// glfwSetFramebufferSizeCallback(win.getWindow(), framebuffer_size_callback); // Framebuffer
-
 	glEnable(GL_DEPTH_TEST);
 
 	// Input
@@ -148,7 +145,7 @@ int main() {
 	Controller player(&win, glm::vec3(0.0f, 0.0f, 8.0f));
 	scene.setCamera(&player);
 
-	while (!glfwWindowShouldClose(win.getWindow())) {
+	while (!win.shouldClose()) {
 		// Handle input
 		player.processInput(scene.deltaTime);
 		processInput(win.getWindow());
@@ -162,10 +159,9 @@ int main() {
 		scene.render();
 
 		// glfw
-		glfwSwapBuffers(win.getWindow());
+		win.swapBuffers();
 		glfwPollEvents();
 	}
 
-	glfwTerminate();
 	return 0;
 }

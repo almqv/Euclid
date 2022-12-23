@@ -25,6 +25,7 @@ class Window {
 		void updateSize(int w, int h);
 		void makeCurrent();
 		void swapBuffers();
+		bool shouldClose();
 	private:
 		GLFWwindow* _win;
 		static std::map<GLFWwindow*, Window*> windowMap;
