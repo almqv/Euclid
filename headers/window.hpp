@@ -20,7 +20,7 @@ class Window {
 
 		unsigned int getWidth()  { return _width; }  // getters and dumb and
 		unsigned int getHeight() { return _height; } // cpp should have readonly fields...
-		GLFWwindow* getWindow() { return _win; }
+		GLFWwindow* getWindow()  { return _win; }
 
 		void updateSize(int w, int h);
 		void makeCurrent();
@@ -35,4 +35,6 @@ class Window {
 
 		void setWidth(unsigned int w)  { _width = w; }
 		void setHeight(unsigned int h) { _height = h; }
+
+		static void framebufferSizeCallback(GLFWwindow* win, int width, int height);
 };

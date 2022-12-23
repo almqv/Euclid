@@ -104,13 +104,6 @@ std::vector<unsigned int> indices({
 
 
 // Window for the game
-Window win("Euclid Engine: Demo");
-Renderer::Scene scene(&win);
-
-void framebuffer_size_callback(GLFWwindow* glfwWindow, int w, int h) {
-	win.updateSize(w, h);
-}
-
 void processInput(GLFWwindow *win) {
 	int action = glfwGetKey(win, GLFW_KEY_ESCAPE);
 	if (action == GLFW_PRESS) {
@@ -120,6 +113,9 @@ void processInput(GLFWwindow *win) {
 
 int main() {
 	// Spawn window
+	Window win("Euclid Engine: Demo");
+	Renderer::Scene scene(&win);
+
 	win.spawn();
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
@@ -127,8 +123,8 @@ int main() {
 		return 1;
 	}
 
-	glViewport(0, 0, win.getWidth(), win.getHeight());
-	glfwSetFramebufferSizeCallback(win.getWindow(), framebuffer_size_callback); // Framebuffer
+	// glViewport(0, 0, win.getWidth(), win.getHeight());
+	// glfwSetFramebufferSizeCallback(win.getWindow(), framebuffer_size_callback); // Framebuffer
 
 	glEnable(GL_DEPTH_TEST);
 

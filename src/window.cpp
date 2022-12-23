@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <stdio.h>
 
+std::map<GLFWwindow*, Window*> Window::windowMap;
+
 Window::Window(const char* title) {
 	this->_title = title;
 }
@@ -15,6 +17,7 @@ Window::Window(const char* title, unsigned int w, unsigned int h) : Window(title
 
 Window::~Window() {
 	glfwDestroyWindow(_win);
+	windowMap.erase(_win);
 }
 
 void Window::spawn() {
@@ -31,6 +34,10 @@ void Window::spawn() {
 		exit(1);
 	}
 
+	// Register window in the std::map
+	windowMap[_win] = this;
+
+	glfwSetFramebufferSizeCallback(_win, framebufferSizeCallback);
 	glfwMakeContextCurrent(_win);
 }
 
@@ -46,4 +53,8 @@ void Window::makeCurrent() {
 
 void Window::swapBuffers() {
 	glfwSwapBuffers(_win);
+}
+
+void Window::framebufferSizeCallback(GLFWwindow* win, int width, int height) {
+	windowMap[win]->updateSize(width, height);
 }
