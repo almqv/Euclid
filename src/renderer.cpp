@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <stdio.h>
 
 #include "GLFW/glfw3.h"
 #include "glm/ext/matrix_transform.hpp"
@@ -72,7 +73,7 @@ namespace Renderer {
 
 	// Scene
 	Scene::Scene(Window* win) {
-		window = win;	
+		window = win;
 	}
 
 	Scene::Scene(Window* win, std::vector<RenderObject*> ROs) : Scene(win) {
@@ -91,6 +92,8 @@ namespace Renderer {
 		// Record deltaTime
 		float curFrame = glfwGetTime();
 		deltaTime = curFrame - lastFrame;
+
+		printf("\rdeltaTime=%f FPS=%f", deltaTime, 1/(deltaTime+0.0001f));
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -117,7 +120,7 @@ namespace Renderer {
 	}
 
 	glm::mat4 Camera::getProjection() {
-		projection = glm::perspective(glm::radians(FOV), (float)window->width() / (float)window->height(), NEAR_PLANE, FAR_PLANE);
+		projection = glm::perspective(glm::radians(FOV), (float)window->getWidth() / (float)window->getHeight(), NEAR_PLANE, FAR_PLANE);
 		return projection;
 	}
 

@@ -15,19 +15,19 @@
 
 std::vector<float> verts({
 	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 
 
 	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 
@@ -41,76 +41,69 @@ std::vector<float> verts({
 	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 
 
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 
 
 	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 
-	 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 
 
 	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 
-	 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
 	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
 });
 // Vert struc: x y z  r g b  tx ty
 
-std::vector<unsigned int> indices({  
-	0, 1, 3, 
+std::vector<unsigned int> indices({
+	0, 1, 3,
 	1, 2, 3,
-	5, 6, 7, 
-	7, 8, 9, 
-	9, 10, 11, 
+	5, 6, 7,
+	7, 8, 9,
+	9, 10, 11,
 	11, 12, 13,
-	0, 1, 3, 
-	3, 4, 5, 
-	5, 6, 7, 
-	7, 8, 9, 
-	9, 10, 11, 
+	0, 1, 3,
+	3, 4, 5,
+	5, 6, 7,
+	7, 8, 9,
+	9, 10, 11,
 	11, 12, 13,
-	0, 1, 3, 
-	3, 4, 5, 
-	5, 6, 7, 
-	7, 8, 9, 
-	9, 10, 11, 
+	0, 1, 3,
+	3, 4, 5,
+	5, 6, 7,
+	7, 8, 9,
+	9, 10, 11,
 	11, 12, 13,
-	0, 1, 3, 
-	3, 4, 5, 
-	5, 6, 7, 
-	7, 8, 9, 
-	9, 10, 11, 
+	0, 1, 3,
+	3, 4, 5,
+	5, 6, 7,
+	7, 8, 9,
+	9, 10, 11,
 	11, 12, 13,
-	0, 1, 3, 
-	3, 4, 5, 
-	5, 6, 7, 
-	7, 8, 9, 
-	9, 10, 11, 
+	0, 1, 3,
+	3, 4, 5,
+	5, 6, 7,
+	7, 8, 9,
+	9, 10, 11,
 	11, 12, 13,
 });
 
 
 // Window for the game
-Window win("Euclid Engine: Demo");
-Renderer::Scene scene(&win);
-
-void framebuffer_size_callback(GLFWwindow* glfwWindow, int w, int h) {
-	win.updateSize(w, h);
-}
-
 void processInput(GLFWwindow *win) {
 	int action = glfwGetKey(win, GLFW_KEY_ESCAPE);
 	if (action == GLFW_PRESS) {
@@ -120,6 +113,9 @@ void processInput(GLFWwindow *win) {
 
 int main() {
 	// Spawn window
+	Window win("Euclid Engine: Demo");
+	Renderer::Scene scene(&win);
+
 	win.spawn();
 
 	if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
@@ -127,13 +123,10 @@ int main() {
 		return 1;
 	}
 
-	glViewport(0, 0, win.width(), win.height());
-	glfwSetFramebufferSizeCallback(win.win, framebuffer_size_callback); // Framebuffer
-
-	glEnable(GL_DEPTH_TEST);  
+	glEnable(GL_DEPTH_TEST);
 
 	// Input
-	glfwSetInputMode(win.win, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
+	glfwSetInputMode(win.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Disable cursor
 
 	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
@@ -152,22 +145,23 @@ int main() {
 	Controller player(&win, glm::vec3(0.0f, 0.0f, 8.0f));
 	scene.setCamera(&player);
 
-	while (!glfwWindowShouldClose(win.win)) {
+	while (!win.shouldClose()) {
 		// Handle input
 		player.processInput(scene.deltaTime);
-		processInput(win.win);
+		processInput(win.getWindow());
 
 		ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
-		// ro2.setPosition(glm::vec3(0.0f, 0.0f, -1000.0f));
+		// ro2.translate(glm::vec3(0.0f, -0.01f, 0.01f));
+		// ro2.translate(glm::vec3(0.0f, 0.0f, -0.001f));
+		ro2.rotate(glm::vec3(1.01f, 1.0f, 1.0f));
 
 		// Render new frame
 		scene.render();
 
 		// glfw
-		glfwSwapBuffers(win.win);
+		win.swapBuffers();
 		glfwPollEvents();
 	}
 
-	glfwTerminate();
 	return 0;
 }

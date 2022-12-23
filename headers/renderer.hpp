@@ -84,7 +84,7 @@ namespace Renderer {
 
 	class Scene {
 		public:
-			float deltaTime = 0.0f;
+			float deltaTime = 0.0f; // Seconds
 
 			Scene(Window* win);
 			Scene(Window* win, std::vector<RenderObject*> ROs);
