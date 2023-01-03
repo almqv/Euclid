@@ -93,6 +93,7 @@ namespace Renderer {
 		float curFrame = glfwGetTime();
 		deltaTime = curFrame - lastFrame;
 
+		// TODO: rm
 		printf("\rdeltaTime=%f FPS=%f", deltaTime, 1/(deltaTime+0.0001f));
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
