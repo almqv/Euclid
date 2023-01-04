@@ -114,7 +114,6 @@ void processInput(GLFWwindow *win) {
 int main() {
 	// Spawn window
 	Window win("Euclid Engine: Demo");
-	Renderer::Scene scene(&win);
 
 	win.spawn();
 
@@ -132,14 +131,24 @@ int main() {
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	// Create scene
+	Renderer::Scene scene(&win);
+
+	// Should have the default metal texture
 	Renderer::TexturedObject ro(verts, indices);
+
+	// Should be the same as ro but with a smiley
 	Renderer::TexturedObject ro2(verts, indices);
+
+	// Should not have a texture
+	Renderer::RenderObject cringe(verts, indices);
+	cringe.setPosition(glm::vec3(2.0, 1.0, 0.0));
 
 	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
 	ro.setTexture(RUSTY_METAL_TEXTURE);
 
 	scene.spawnObject(&ro);
 	scene.spawnObject(&ro2);
+	scene.spawnObject(&cringe);
 
 	// Controller test
 	Controller player(&win, glm::vec3(0.0f, 0.0f, 8.0f));
@@ -151,8 +160,6 @@ int main() {
 		processInput(win.getWindow());
 
 		ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
-		// ro2.translate(glm::vec3(0.0f, -0.01f, 0.01f));
-		// ro2.translate(glm::vec3(0.0f, 0.0f, -0.001f));
 		ro2.rotate(glm::vec3(1.01f, 1.0f, 1.0f));
 
 		// Render new frame

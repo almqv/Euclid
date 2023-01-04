@@ -92,8 +92,9 @@ namespace Renderer {
 			void setCamera(Camera *cam);
 			void spawnObject(RenderObject *ro);
 			void render();
-		// protected:
+		protected: // NOTE: dumb
 			Camera *camera;
+
 		private:
 			std::vector<RenderObject*> renderObjects = std::vector<RenderObject*>();
 			Window* window;

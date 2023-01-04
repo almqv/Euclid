@@ -103,9 +103,12 @@ namespace Shaders {
 
 	void Shader::setMat4(const std::string &name, glm::mat4 val) const {
 		glUniformMatrix4fv(uniLocation(name), 1, GL_FALSE, glm::value_ptr(val));
-	};
+	}
 
-	// Private stuff
+	void Shader::setVec3(const std::string &name, glm::vec3 val) const {
+		glUniform3f(uniLocation(name), val[0], val[1], val[2]);
+	}
+
 	unsigned int Shader::uniLocation(const std::string &name) const {
 		return glGetUniformLocation(id, name.c_str());
 	}

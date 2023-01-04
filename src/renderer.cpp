@@ -167,6 +167,10 @@ namespace Renderer {
 		// Texture
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_PTR_SIZE, (void*)(6*sizeof(float)));
 		glEnableVertexAttribArray(2);
+
+		// Normal
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)0);
+		glEnableVertexAttribArray(3);
 	}
 
 	void RenderObject::preRenderHook() {}
@@ -179,6 +183,10 @@ namespace Renderer {
 
 		shader.setMat4("view", cam.view);
 		shader.setMat4("projection", cam.getProjection());
+
+		// Testing
+		shader.setVec3("lightColor", glm::vec3(2.0, 1.0, 0.0)); // TODO fix
+		// shader.setFloat("ambientLightning", this->ambientLightning);
 
 		shader.use();
 
