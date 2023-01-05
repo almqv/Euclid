@@ -67,7 +67,7 @@ std::vector<float> verts({
 	-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
 	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
 });
-// Vert struc: x y z  r g b  tx ty
+// Vert struc: x y z  r g b  tx ty  lnx lny lnz
 
 std::vector<unsigned int> indices({
 	0, 1, 3,

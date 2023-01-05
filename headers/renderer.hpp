@@ -85,6 +85,8 @@ namespace Renderer {
 	class Scene {
 		public:
 			float deltaTime = 0.0f; // Seconds
+			float diffuseStrength = 0.1;
+			glm::vec3 diffuseColor = glm::vec3(0.0, 0.0, 0.0);
 
 			Scene(Window* win);
 			Scene(Window* win, std::vector<RenderObject*> ROs);
