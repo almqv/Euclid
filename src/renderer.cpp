@@ -96,11 +96,12 @@ namespace Renderer {
 		// TODO: rm
 		printf("\rdeltaTime=%f FPS=%f", deltaTime, 1/(deltaTime+0.0001f));
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		// glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0, 0, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		for ( RenderObject *ro: renderObjects )
-			ro->render(*camera);
+		for (RenderObject *ro: renderObjects)
+			ro->render(*camera, diffuseColor, diffuseStrength);
 
 		// Record the last frame
 		lastFrame = curFrame;
