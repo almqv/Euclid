@@ -67,11 +67,16 @@ namespace Renderer {
 			glm::mat4 projection = glm::mat4(1.0f);
 	};
 
+	struct LightningData {
+		// Fullbright settings
+		glm::vec3 lightColor = glm::vec3(1.0, 1.0, 1.0);
+		float ambientStrength = 1.0;
+	};
 
 	class RenderEntity : public Entity {
 		public:
 			RenderEntity(std::vector<float> verts, std::vector<unsigned int> indices);
-			void render(Camera cam);
+			void render(Camera cam, LightningData* lightData);
 			void preRenderHook();
 		private:
 			Shaders::Shader shader;
@@ -95,19 +100,17 @@ namespace Renderer {
 	class Scene {
 		public:
 			float deltaTime = 0.0f; // Seconds
-			float diffuseStrength = 0.1;
-			glm::vec3 diffuseColor = glm::vec3(0.0, 0.0, 0.0);
 
 			Scene(Window* win);
+			Scene(Window* win, LightningData* lightData);
 			Scene(Window* win, std::vector<RenderEntity*> ROs);
 
 			void setCamera(Camera *cam);
 			void spawnEntity(RenderEntity *ro);
 			void render();
-		protected: // NOTE: dumb
-			Camera *camera;
-
 		private:
+			Camera *camera;
+			LightningData *lightData;
 			std::vector<RenderEntity*> renderEntitys = std::vector<RenderEntity*>();
 			Window* window;
 			float lastFrame = 0.0f;

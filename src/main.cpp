@@ -135,6 +135,7 @@ int main() {
 
 	// Should have the default metal texture
 	Renderer::TexturedEntity ro(verts, indices);
+	ro.setPosition(glm::vec3(0.0, 0.0, 4.0));
 
 	// Should be the same as ro but with a smiley
 	Renderer::TexturedEntity ro2(verts, indices);
@@ -159,7 +160,8 @@ int main() {
 		player.processInput(scene.deltaTime);
 		processInput(win.getWindow());
 
-		ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
+		// ro.translate(glm::vec3(0.0f, 0.0f, 0.001f));
+		ro.rotate(glm::vec3(0.0, 0.4, 0.0));
 		ro2.rotate(glm::vec3(1.01f, 1.0f, 1.0f));
 
 		// Render new frame

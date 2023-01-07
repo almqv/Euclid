@@ -71,9 +71,18 @@ namespace Renderer {
 		setRotation(angle + dangle);
 	}
 
+	// Light data
+	LightningData DEFAULT_LIGHT_DATA;
+
 	// Scene
 	Scene::Scene(Window* win) {
 		window = win;
+		lightData = &DEFAULT_LIGHT_DATA; // default lightning data
+		camera = new Camera(win); // default camera
+	}
+
+	Scene::Scene(Window* win, LightningData* lightData) : Scene(win) {
+		this->lightData = lightData;
 	}
 
 	Scene::Scene(Window* win, std::vector<RenderEntity*> ROs) : Scene(win) {
@@ -100,7 +109,7 @@ namespace Renderer {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for ( RenderEntity *ro: renderEntitys )
-			ro->render(*camera);
+			ro->render(*camera, lightData);
 
 		// Record the last frame
 		lastFrame = curFrame;
@@ -121,7 +130,8 @@ namespace Renderer {
 	}
 
 	glm::mat4 Camera::getProjection() {
-		projection = glm::perspective(glm::radians(FOV), (float)window->getWidth() / (float)window->getHeight(), NEAR_PLANE, FAR_PLANE);
+		projection = glm::perspective(glm::radians(FOV),
+									  (float)window->getWidth() / (float)window->getHeight(), NEAR_PLANE, FAR_PLANE);
 		return projection;
 	}
 
@@ -176,18 +186,21 @@ namespace Renderer {
 	void RenderEntity::preRenderHook() {}
 
 	// TODO: Make prerender instead of render
-	void RenderEntity::render(Camera cam) {
+	void RenderEntity::render(Camera cam, LightningData* lightData) {
+		// Model viewspace rotation etc
 		shader.setMat4("modelPosition", positionTransform);
 		shader.setMat4("modelRotation", rotationTransform);
 		shader.setMat4("model", modelTransform);
 
+		// Camera angles & such
 		shader.setMat4("view", cam.view);
 		shader.setMat4("projection", cam.getProjection());
 
-		// Testing
-		// shader.setVec3("lightColor", glm::vec3(2.0, 1.0, 0.0)); // TODO fix
-		// shader.setFloat("ambientLightning", this->ambientLightning);
+		// Lightning
+		shader.setVec3("lightColor", lightData->lightColor);
+		shader.setFloat("ambientStrength", lightData->ambientStrength);
 
+		// Use the shader
 		shader.use();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

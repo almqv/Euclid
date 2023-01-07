@@ -6,9 +6,9 @@ in vec4 VertexColor;
 in vec2 TexCoord;
 
 uniform sampler2D inpTexture;
-uniform vec3 diffuseColor;
-uniform float diffuseStrength;
+uniform vec3 lightColor;
+uniform float ambientStrength;
 
 void main() {
-	FragColor = texture(inpTexture, TexCoord) * VertexColor * vec4(diffuseColor * diffuseStrength, 1.0);
+	FragColor = texture(inpTexture, TexCoord) * VertexColor * vec4(lightColor * ambientStrength, 1.0);
 } 
