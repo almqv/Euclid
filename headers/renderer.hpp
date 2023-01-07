@@ -9,7 +9,6 @@
 
 #include "textures.hpp"
 #include "window.hpp"
-#include "scene.hpp"
 
 
 #define VERTEX_ATTRIB_PTR_SIZE 8 * sizeof(float)
@@ -72,7 +71,7 @@ namespace Renderer {
 	class RenderObject : public Object {
 		public:
 			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
-			void render(Scene* scene);
+			void render(Camera cam);
 			void preRenderHook();
 		private:
 			Shaders::Shader shader;
@@ -81,6 +80,27 @@ namespace Renderer {
 			unsigned int VAO;
 			std::vector<float> vertsVec;
 			std::vector<unsigned int> indicesVec;
+	};
+
+	class Scene {
+		public:
+			float deltaTime = 0.0f; // Seconds
+			float diffuseStrength = 0.1;
+			glm::vec3 diffuseColor = glm::vec3(0.0, 0.0, 0.0);
+
+			Scene(Window* win);
+			Scene(Window* win, std::vector<RenderObject*> ROs);
+
+			void setCamera(Camera *cam);
+			void spawnObject(RenderObject *ro);
+			void render();
+		protected: // NOTE: dumb
+			Camera *camera;
+
+		private:
+			std::vector<RenderObject*> renderObjects = std::vector<RenderObject*>();
+			Window* window;
+			float lastFrame = 0.0f;
 	};
 
 	class TexturedObject : public RenderObject {
