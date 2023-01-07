@@ -134,21 +134,21 @@ int main() {
 	Renderer::Scene scene(&win);
 
 	// Should have the default metal texture
-	Renderer::TexturedObject ro(verts, indices);
+	Renderer::TexturedEntity ro(verts, indices);
 
 	// Should be the same as ro but with a smiley
-	Renderer::TexturedObject ro2(verts, indices);
+	Renderer::TexturedEntity ro2(verts, indices);
 
 	// Should not have a texture
-	Renderer::RenderObject cringe(verts, indices);
+	Renderer::RenderEntity cringe(verts, indices);
 	cringe.setPosition(glm::vec3(2.0, 1.0, 0.0));
 
 	ro2.setTexture("assets/textures/meep.jpg"); // TODO: fix texture bug
 	ro.setTexture(RUSTY_METAL_TEXTURE);
 
-	scene.spawnObject(&ro);
-	scene.spawnObject(&ro2);
-	scene.spawnObject(&cringe);
+	scene.spawnEntity(&ro);
+	scene.spawnEntity(&ro2);
+	scene.spawnEntity(&cringe);
 
 	// Controller test
 	Controller player(&win, glm::vec3(0.0f, 0.0f, 8.0f));

@@ -21,11 +21,11 @@
 #define FAR_PLANE 100.0f
 
 namespace Renderer {
-	class Object {
+	class Entity {
 		public:
-			Object();
-			Object(glm::vec3 pos);
-			Object(glm::vec3 pos, glm::vec3 angle);
+			Entity();
+			Entity(glm::vec3 pos);
+			Entity(glm::vec3 pos, glm::vec3 angle);
 
 			void transform(glm::mat4 T);
 			void scale(glm::vec3 vscale);
@@ -47,7 +47,7 @@ namespace Renderer {
 			glm::vec3 angle = glm::vec3(0.0f, 0.0f, 0.0f);
 	};
 
-	class Camera : public Object {
+	class Camera : public Entity {
 		public:
 			glm::mat4 view = glm::mat4(1.0f);
 			float FOV;
@@ -68,9 +68,9 @@ namespace Renderer {
 	};
 
 
-	class RenderObject : public Object {
+	class RenderEntity : public Entity {
 		public:
-			RenderObject(std::vector<float> verts, std::vector<unsigned int> indices);
+			RenderEntity(std::vector<float> verts, std::vector<unsigned int> indices);
 			void render(Camera cam);
 			void preRenderHook();
 		private:
@@ -82,6 +82,16 @@ namespace Renderer {
 			std::vector<unsigned int> indicesVec;
 	};
 
+	class TexturedEntity : public RenderEntity {
+		public:
+			using RenderEntity::RenderEntity;
+			void setTexture(const char* t_src);
+			void preRenderHook();
+		private:
+			Textures::Texture2D texture;
+			void bind_texture(Textures::Texture2D texture);
+	};
+
 	class Scene {
 		public:
 			float deltaTime = 0.0f; // Seconds
@@ -89,27 +99,17 @@ namespace Renderer {
 			glm::vec3 diffuseColor = glm::vec3(0.0, 0.0, 0.0);
 
 			Scene(Window* win);
-			Scene(Window* win, std::vector<RenderObject*> ROs);
+			Scene(Window* win, std::vector<RenderEntity*> ROs);
 
 			void setCamera(Camera *cam);
-			void spawnObject(RenderObject *ro);
+			void spawnEntity(RenderEntity *ro);
 			void render();
 		protected: // NOTE: dumb
 			Camera *camera;
 
 		private:
-			std::vector<RenderObject*> renderObjects = std::vector<RenderObject*>();
+			std::vector<RenderEntity*> renderEntitys = std::vector<RenderEntity*>();
 			Window* window;
 			float lastFrame = 0.0f;
-	};
-
-	class TexturedObject : public RenderObject {
-		public:
-			using RenderObject::RenderObject;
-			void setTexture(const char* t_src);
-			void preRenderHook();
-		private:
-			Textures::Texture2D texture;
-			void bind_texture(Textures::Texture2D texture);
 	};
 }

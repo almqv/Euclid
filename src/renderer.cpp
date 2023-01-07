@@ -12,42 +12,42 @@
 #include "shaders.hpp"
 
 namespace Renderer {
-	// Object
-	Object::Object() {}
+	// Entity
+	Entity::Entity() {}
 
-	Object::Object(glm::vec3 pos) : Object() {
+	Entity::Entity(glm::vec3 pos) : Entity() {
 		setPosition(pos);
 	}
 
-	Object::Object(glm::vec3 pos, glm::vec3 angle) : Object(pos) {
+	Entity::Entity(glm::vec3 pos, glm::vec3 angle) : Entity(pos) {
 		setRotation(angle);
 	}
 
-	void Object::scale(glm::vec3 vscale) {
+	void Entity::scale(glm::vec3 vscale) {
 		glm::mat4 T = glm::mat4(1.0f);
 		T = glm::scale(T, vscale);
 		modelTransform = T;
 	}
 
-	void Object::transform(glm::mat4 T) {
+	void Entity::transform(glm::mat4 T) {
 		modelTransform = T;
 	}
 
-	void Object::updatePositionTransform() {
+	void Entity::updatePositionTransform() {
 		glm::mat4 T = glm::mat4(1.0f);
 		positionTransform = glm::translate(T, position);
 	}
 
-	void Object::setPosition(glm::vec3 pos) {
+	void Entity::setPosition(glm::vec3 pos) {
 		position = pos;
 		updatePositionTransform();
 	}
 
-	void Object::translate(glm::vec3 dpos) {
+	void Entity::translate(glm::vec3 dpos) {
 		setPosition(position + dpos);
 	}
 
-	void Object::updateRotationTransform() {
+	void Entity::updateRotationTransform() {
 		float x_Ang, y_Ang, z_Ang;
 		x_Ang = angle[0];
 		y_Ang = angle[1];
@@ -62,12 +62,12 @@ namespace Renderer {
 		rotationTransform = T;
 	}
 
-	void Object::setRotation(glm::vec3 ang) {
+	void Entity::setRotation(glm::vec3 ang) {
 		angle = ang;
 		updateRotationTransform();
 	}
 
-	void Object::rotate(glm::vec3 dangle) {
+	void Entity::rotate(glm::vec3 dangle) {
 		setRotation(angle + dangle);
 	}
 
@@ -76,12 +76,12 @@ namespace Renderer {
 		window = win;
 	}
 
-	Scene::Scene(Window* win, std::vector<RenderObject*> ROs) : Scene(win) {
-		renderObjects = ROs;
+	Scene::Scene(Window* win, std::vector<RenderEntity*> ROs) : Scene(win) {
+		renderEntitys = ROs;
 	}
 
-	void Scene::spawnObject(RenderObject *ro) {
-		renderObjects.push_back(ro);
+	void Scene::spawnEntity(RenderEntity *ro) {
+		renderEntitys.push_back(ro);
 	}
 
 	void Scene::setCamera(Camera *cam) {
@@ -99,7 +99,7 @@ namespace Renderer {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		for ( RenderObject *ro: renderObjects )
+		for ( RenderEntity *ro: renderEntitys )
 			ro->render(*camera);
 
 		// Record the last frame
@@ -129,8 +129,8 @@ namespace Renderer {
 		view = glm::lookAt(position, position + front, up);
 	}
 
-	// RenderObject
-	RenderObject::RenderObject(std::vector<float> verts, std::vector<unsigned int> indices)
+	// RenderEntity
+	RenderEntity::RenderEntity(std::vector<float> verts, std::vector<unsigned int> indices)
 		: shader(VERT_SHADER_SRC_FILE, FRAG_SHADER_SRC_FILE) {
 		vertsVec = verts;
 		indicesVec = indices;
@@ -141,7 +141,7 @@ namespace Renderer {
 		unsigned int indicesArray[indicesVec.size()];
 		std::copy(indicesVec.begin(), indicesVec.end(), indicesArray);
 
-		// Vertex Array Object
+		// Vertex Array Entity
 		glGenVertexArrays(1, &VAO); // gen the VAO
 		glBindVertexArray(VAO); // bind it
 
@@ -173,10 +173,10 @@ namespace Renderer {
 		// glEnableVertexAttribArray(3);
 	}
 
-	void RenderObject::preRenderHook() {}
+	void RenderEntity::preRenderHook() {}
 
 	// TODO: Make prerender instead of render
-	void RenderObject::render(Camera cam) {
+	void RenderEntity::render(Camera cam) {
 		shader.setMat4("modelPosition", positionTransform);
 		shader.setMat4("modelRotation", rotationTransform);
 		shader.setMat4("model", modelTransform);
@@ -194,19 +194,19 @@ namespace Renderer {
 		glDrawArrays(GL_TRIANGLES, 0, indicesVec.size());
 	}
 
-	// TexturedObject
-	void TexturedObject::setTexture(const char* t_src) {
+	// TexturedEntity
+	void TexturedEntity::setTexture(const char* t_src) {
 		texture.texture_src = t_src;
 		texture.load();
 	}
 
-	void TexturedObject::preRenderHook() {
+	void TexturedEntity::preRenderHook() {
 		if (texture.loaded)
 			texture.bind();
 	}
 
 	// Private stuff
-	void TexturedObject::bind_texture(Textures::Texture2D new_texture) {
+	void TexturedEntity::bind_texture(Textures::Texture2D new_texture) {
 		texture = new_texture;
 	}
 }
