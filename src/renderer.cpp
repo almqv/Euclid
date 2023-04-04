@@ -183,9 +183,8 @@ namespace Renderer {
 		// glEnableVertexAttribArray(3);
 	}
 
-	void RenderEntity::preRenderHook() {}
+	void RenderEntity::preRenderHook() {} // TODO: rm
 
-	// TODO: Make prerender instead of render
 	void RenderEntity::render(Camera cam, LightningData* lightData) {
 		// Model viewspace rotation etc
 		shader.setMat4("modelPosition", positionTransform);

@@ -20,5 +20,5 @@ void main() {
 	gl_Position = projection * view * (modelRotation * modelPosition * model) * vec4(aPos, 1.0);
 	VertexColor = vec4(aColor, 1.0);
 	TexCoord = aTexCoord;
-	// Normal = aNormal;
-} 
+	Normal = vec3(1.0, 1.0, 1.0);
+}
